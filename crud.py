@@ -3,7 +3,7 @@
 from model import db, User, Prescription, Medication, connect_to_db
 
 # Function to create a new user with email and password
-def create_user(email, password):
+def register_user(email, password):
     """Create and return a new user."""
 
     user = User(email=email, password=password)

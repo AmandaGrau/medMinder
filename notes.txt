@@ -4,6 +4,21 @@ Create classes (users/prescriptions/meds)
 create database
 create data instances
 
+
+
+# ---------
+# To Do:
+# ---------
+# Create flask session
+# Create routes / view functions
+# return redirect or render template for each route
+# Create route for user to view their prescriptions
+# Create route for prescription updates 
+# Create route for user to view their treating doctors
+# Create route to handle doctor updates
+
+
+
 <<<<<<<<<<<<<<<< 01/09/24 >>>>>>>>>>>>>>>
 *** Start of Project Season ***
 Project Prep:
@@ -34,6 +49,31 @@ fix port forwarding
 <<<<<<<<<<<<<<<< 01/11/24 >>>>>>>>>>>>>>>
 Create functions in crud.py
 Work on user login functions
+
+
+<<<<<<<<<<<<<<<< 01/12/24 >>>>>>>>>>>>>>>
+Reviewed API docs on DrugBank.com
+Spent way too much time spinning on looking at DrugBank.com
+
+
+<<<<<<<<<<<<<<<< 01/13/24 >>>>>>>>>>>>>>>
+played around with trying to insert bootstrap 
+but kept getting errors and ended up reverting back to prior version
+
+<<<<<<<<<<<<<<<< 01/16/24 >>>>>>>>>>>>>>>
+Create a plan for effectively moving forward with project features
+Review login form and routes
+create route for registering a user
+create html template for registering a user
+create a route for user to add a prescription
+create html template for adding a prescription
+Review drug database API docs
+
+
+
+
+
+
 
 
 
