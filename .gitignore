@@ -3,3 +3,4 @@ env
 __pycache__
 notes.txt
 project_proposal.txt
+secrets.sh

@@ -90,20 +90,20 @@ body {
 }
 
 /* remember me checkbox */
-.password-options label input {
+/* .password-options label input {
     accent-color: #fff;
     margin-right: 3px;
-}
-
+} */
+/* 
 /* forgot password option */
-.password-options a {
+/* .password-options a {
     color: #fff;
     text-decoration: none;
-}
+} */
 
-.password-options a:hover {
+/* .password-options a:hover {
     text-decoration: underline;
-}
+} */
 
 .wrapper .btn {
     width: 100%;

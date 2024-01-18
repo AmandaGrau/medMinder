@@ -10,7 +10,7 @@ from jinja2 import StrictUndefined
 import os
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY")
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.jinja_env.undefined = StrictUndefined
 
 
@@ -19,7 +19,7 @@ app.jinja_env.undefined = StrictUndefined
 def home():
     """View homepage."""
 
-    return render_template("home.html")
+    return render_template("homepage.html")
 
 
 # Route for user login
@@ -27,50 +27,75 @@ def home():
 def login():
     """Process login for user."""
 
-    email = request.form.get('email')
-    password = request.form.get('password')
-
-    user = crud.get_user_by_email(email)
-
-    # if user active, save to session
-    if user or user.password == password:
-        session["user_email"] = user.email
-        flash(f"Hello, {user.email}!")
-        return redirect("/")
-
-    # if login fails, flash message prompting user to try again
-    else:
-        flash("The email or password you entered is incorrect. Please try again.")
-    return render_template("/home.html")
-
-
-# Route for user to create account
-@app.route("/register", methods=["POST", "GET"])
-def register_user():
-    """Register a user."""
-
-    if request.method =="POST":
+    if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
 
-        # if user registered but not logged in, flash a prompt for user to login
-        if crud.get_user_by_email(email):
-            # flash a message prompting user to login
-            flash('Please log in.')
-            # redirct user to login form
-            return redirect("/login")
+        user = crud.get_user_by_email(email)
+        if user and user.password == password:
+            # session["user_id"] = user.user_id
+            # # save name to session
+            session['user.fname'] = user.fname
+            # flash message that greets user with first name
+            flash(f"Hello, {user.fname}!")
+        return redirect('/profile')
 
-        # Create, add, and save new user to database
-        user = crud.create_user(email, password)
-        db.session.add(user)
-        db.session.commit()
+    # if login fails, flash message prompting user to try again
+    else:
+        flash('The email or password you entered is incorrect. Please try again.')
+    return render_template('homepage.html')
 
-        # Store user in session and flash message confirming successful login
-        session["user_email"] = user.email
-        flash(f"Welcome, {user.email}! Thank you for registering with medMinder.")
+
+# Route for user to create account
+@app.route('/register', methods=['POST', 'GET'])
+def register_user():
+    """Register a user."""
+
+    if request.method =='POST':
+        fname = request.form.get('fname')
+        lname = request.form.get('lname')
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        user = crud.get_user_by_email(email)
+        # if user is registered but not logged in
+        if user:
+            # Display a message prompting the user to login
+            flash('A user account already exists with this email. Please log into your account.')
+            # Take user to the login form
+            return redirect('/login')
+
+        # Create and add the new user to the database
+        add_user = crud.register_user(fname, lname, email, password)
+        # db.session.add(add_user)
+        # db.session.commit()
+
+        # Save user to session
+        session['user_id'] = add_user.user_id
+        # Display message confirming successful login
+        flash(f'Welcome, {fname}! Thank you for registering with medMinder.')
         # If login successful, redirect to profile page (not yet created)
-        return redirect ("/")
-    return render_template("register.html")
+        return redirect ('/profile')
+    return render_template('register.html')
+
+# Route for user to view profile
+@app.route('/profile')
+def view_profile():
+    """View user profile."""
+
+    if 'user_id' not in session:
+        flash(f'Please log in to view your profile.')
+        return redirect("/login")
+
+    user = crud.get_user_by_id(session['user_id'])
+    return render_template('profile.html', user=user)
+    # return render_template("profile.html")
+
+
+
+
+
+# @app.route("/add_prescription")
 
 
 
@@ -78,4 +103,4 @@ def register_user():
 # If true, execute following code
 if __name__ == "__main__":
     connect_to_db(app) # Establish connection to the database
-    app.run(debug=False) # Run Flask app and enable debugging
+    app.run(debug=True) # Run Flask app and enable debugging

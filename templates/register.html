@@ -1,16 +1,29 @@
 {% extends 'base.html' %}
-{% block title %}Account{% endblock %}
+{% block title %}medMinder Home{% endblock %}
 
-    <title>Account</title>
+{% block body %}
 
-    {% block body %} -->
-    <!-- Form for user to create an account -->
-    <h2>Create Account</h2>
-    <form action="/account", method="POST">
-        <p>
-            Email <input type="text">
-            Password <input type="password">
-        </p>
-            <Input type="submit">
+  <div class="wrapper">
+    <!-- Form for new user to register -->
+    <form action="/register", method="POST">
+      <br>
+      <h1>Register</h1>
+      <div class="input-box">
+        <input type="text" placeholder="First Name" required>
+      </div>
+      <div class="input-box">
+        <input type="text" placeholder="Last Name" required>
+      </div>
+      <div class="input-box"></div>
+        <input type="text" placeholder="Email" required>
+      </div>
+      <div class="input-box">
+        <input type="text" placeholder="Password" required>
+      </div>
+      <br>
+      <button type="submit"class="btn">Register</button>
+      <br>
     </form>
+  </div>
+
 {% endblock %}

@@ -1,4 +1,5 @@
 """Models for prescription tracking app."""
+from datetime import datetime
 from flask import Flask, session, render_template, url_for, request, flash, redirect
 # Import SQLAlchemy constructor functionn
 from flask_sqlalchemy import SQLAlchemy
@@ -19,24 +20,23 @@ def connect_to_db(flask_app, db_uri="postgresql:///prescriptions", echo=True):
     print("Connected to db!")
 
 
-
-
-
 class User(db.Model):
     """A user."""
 
     __tablename__ = "users"
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    email = db.Column(db.String, unique=True)
-    password = db.Column(db.String)
+    fname = db.Column(db.String(20), nullable=False)
+    lname = db.Column(db.String(20), nullable=False)
+    email = db.Column(db.String(100), nullable=False, unique=True)
+    password = db.Column(db.String(100), nullable=False)
 
     prescriptions = db.relationship("Prescription", back_populates="user")
 
     def __repr__(self):
         """Show user info."""
 
-        return f"<user_id={self.user_id} fname={self.fname} email={self.email}"
+        return f"<fname:{self.fname} lname:{self.lname} email:{self.email} password:{self.password}>"
 
 
 # Table for user's prescribed medications
@@ -48,12 +48,9 @@ class Prescription(db.Model):
     prescription_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     medication_id = db.Column(db.Integer, db.ForeignKey("medications.medication_id"))
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    drug_name = db.Column(db.String)
+    drugrx_name = db.Column(db.String)
     dosage_amount = db.Column(db.Integer)
     frequency_taken = db.Column(db.String)
-    # refill_date = db.Column(db.DateTime)
-    # Doctor class to be added in 2.0
-    # doctor_id = db.Column(db.ForeignKey("doctor_id"))
 
     user = db.relationship("User", back_populates="prescriptions")
     medication = db.relationship("Medication", back_populates="prescriptions")
@@ -61,7 +58,7 @@ class Prescription(db.Model):
     def __repr__(self):
         """Show prescribed dosge, frequency taken, and refill due date."""
 
-        return f"<Name: DOSE: {self.dosage_amount} TAKEN: {self.frequency_taken}.>"
+        return f"<NAME:{self.drugrx_name} DOSE:{self.dosage_amount} TAKEN:{self.frequency_taken}>"
 
 
 # Table for all medications from API
@@ -81,7 +78,7 @@ class Medication(db.Model):
     def __repr__(self):
         """Formal and generic medication names."""
 
-        return f"<Brand brand_name={self.brand_name}, Generic generic_name={self.generic_name}>"
+        return f"<Brand:{self.brand_name}, Generic:{self.generic_name}>"
 
 
 if __name__ == "__main__":

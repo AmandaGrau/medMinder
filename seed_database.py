@@ -17,10 +17,12 @@ model.db.create.all()
 
 # generate users and prescriptions to seed database
 for n in range(15):
+    fname = 'testFname'
+    lname = 'testLname'
     email = f"user{n}@test.com"
     password = "test"
 
-    user = crud.create_user(email, password)
+    user = crud.register_user(fname, lname, email, password)
     model.db.session.add(user)
 
 model.db.session.commit()

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}User Profile{% endblock %}
+
+{% block body %}
+
+    <h1>User Profile</h1>
+    <p>First Name: {{ user.fname }}</p>
+    <p>Last Name: {{ user.lname }}</p>
+    <p>Email: {{ user.email }}</p>
+
+<!-- Display the User's prescriptions -->
+<h2>Prescriptions:</h2>
+
+<table>
+  <thead>
+    <!-- Table rows/headers -->
+    <tr>
+      <th>DrugRx Name</th>
+      <th>Dosage Amount</th>
+      <th>Frequency Taken</th>
+      <th>Edit</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Loop over user's prescriptions to display prescription details -->
+    {% for prescription in user.prescriptions %}
+      <tr>
+        <td>{{ prescription.drugrx_name }}</td>
+        <td>{{ prescription.dosage_amount }}</td>
+        <td>{{ prescription.frequency_taken }}</td>
+        <!-- link to db -->
+        
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+
+{% endblock %}
