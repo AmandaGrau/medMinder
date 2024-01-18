@@ -2,6 +2,15 @@
 
 from model import db, User, Prescription, Medication, connect_to_db
 
+def add_new_user(fname, lname, email, password):
+    """Add new user to database."""
+
+    user = User(fname=fname, lname=lname, email=email, password=password)
+
+    db.session.add(user)
+    db.session.commit()
+
+    return user
 # Function to create a new user with email and password
 def register_user(fname, lname, email, password):
     """Create and return a new user."""
@@ -10,13 +19,11 @@ def register_user(fname, lname, email, password):
 
     return user
 
-
 # Function to get all usersujj
 def get_all_users():
     """Return all users"""
 
     return User.query.all()
-
 
 # Function to get a user by user_id
 def get_user_by_id(user_id):
@@ -52,28 +59,28 @@ def get_prescription_by_id(prescription_id):
 
 # Function to get all prescriptions
 def get_all_prescriptions():
-    """Returns all user prescriptions."""
+    """Return all user prescriptions."""
 
     return Prescription.query.all()
 
 
 # Function to get a prescription by drug name
 def get_prescription_by_drug_name(drugrx_name):
-    """Return a prescription by drug name."""
+    """Return prescription by drug name."""
 
     return Prescription.query.filter_by(drugrx_name).first()
 
 
 # Function to get a prescription by dosage_amount
 def get_prescription_by_dosage(dosage_amount):
-    """Return a prescription by dosage amount."""
+    """Return prescription by dosage amount."""
 
     return Prescription.query.filter_by(dosage_amount).first()
 
 
 # Function to get a prescription by frequency taken
 def get_prescription_by_frequency(frequency_taken):
-    """Return a prescription by frequency taken."""
+    """Return prescription by frequency taken."""
 
     return Prescription.query.filter_by(frequency_taken).first()
 

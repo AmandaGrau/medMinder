@@ -4,9 +4,20 @@
 {% block body %}
 
     <h1>User Profile</h1>
+
+<!-- Add if statement to check for user -->
+<!-- {% if user %}
+  <p>Hello, {{ user.fname }}</p>
+{% else %}
+  <p>Please login to your account.</p>
+{% endif %} -->
+
+
+<!-- Display user first name, last name, email -->
     <p>First Name: {{ user.fname }}</p>
     <p>Last Name: {{ user.lname }}</p>
     <p>Email: {{ user.email }}</p>
+
 
 <!-- Display the User's prescriptions -->
 <h2>Prescriptions:</h2>

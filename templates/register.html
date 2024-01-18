@@ -2,23 +2,22 @@
 {% block title %}medMinder Home{% endblock %}
 
 {% block body %}
-
   <div class="wrapper">
     <!-- Form for new user to register -->
     <form action="/register", method="POST">
       <br>
       <h1>Register</h1>
       <div class="input-box">
-        <input type="text" placeholder="First Name" required>
+        <input type="text" name="fname" placeholder="First Name" required>
       </div>
       <div class="input-box">
-        <input type="text" placeholder="Last Name" required>
-      </div>
-      <div class="input-box"></div>
-        <input type="text" placeholder="Email" required>
+        <input type="text" name="lname" placeholder="Last Name" required>
       </div>
       <div class="input-box">
-        <input type="text" placeholder="Password" required>
+        <input type="text" name="email" placeholder="Email" required>
+      </div>
+      <div class="input-box">
+        <input type="text" name="password" placeholder="Password" required>
       </div>
       <br>
       <button type="submit"class="btn">Register</button>
