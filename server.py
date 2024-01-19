@@ -121,9 +121,13 @@ def add_prescription():
 
     # if the user doesn't exist, display a message to prompt user to login or register
     else:
-        flash('Please login or register to manage prescriptions.')
+        flash('Please login or register to manage your prescriptions.')
     # redirect user to login
     return redirect('/')
+
+
+
+
 
 # Edit a prescription
 # @app.route('/edit_prescription', methods='POST')

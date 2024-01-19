@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Homepage{% endblock %}
+
+{% block body %}
+
+  <!-- Container for login form -->
+  <div class="wrapper">
+    <form action="/login" method="POST">
+      <!-- Displays 'User Login' above input form -->
+      <h1>User Login</h1>
+      <!-- Displays input box with placeholders -->
+      <div class="input-box">
+        <input type="text" placeholder="Email" name="email" required>
+      </div>
+      <div class="input box">
+        <input type="password" placeholder="Password" name="password" required>
+      </div>
+        <!-- Displays checkbox for user to choose "Remember me" -->
+      <!-- <div class="password-options"> -->
+        <!-- <label><input type="checkbox"> Remember me </label> -->
+        <!-- Displays "Forgot Password" option for user to choose -->
+        <!-- <a href="#">Forgot password?</a> -->
+      <!-- </div> -->
+      <!-- Displays "Login" button for user to click -->
+      <input class="btn btn-dafault" type="submit" value="Login">
+      <!-- <button type="submit"class="btn">Login</button> -->
+      <!-- Displays "" and routes user to create account -->
+      <div class="register-link">
+        <p>Don't have an account?
+        <a href="/register">Register here!</a></p>
+      </div>
+    </form>
+  </div>
+
+{% endblock %}
