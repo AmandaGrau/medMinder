@@ -31,22 +31,24 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        user = crud.get_user_by_id('user_id')
-        if user.id and user.password == password:
-            session["user_id"] = user.user_id
-            # # save name to session
-            # session['user.fname'] = user.fname
-            # flash message that greets user with first name
+        # user_id = session.get('user_id')
+        # user = crud.get_user_by_id(user_id)
+
+        user = crud.get_user_by_email(email)
+
+        if user and user.password == password:
+        # if user.id and user.password == password:
+            session['user_id'] = user.user_id
             flash(f"Hello, {user.fname}!")
         return redirect('/profile')
 
-    # if login fails, flash message prompting user to try again
+    # If user login attempt fails, display a message asking the user to try logging in again
     else:
         flash('The email or password you entered is incorrect. Please try again.')
     return render_template('homepage.html')
 
 
-# Route for user to create account
+# Route for user to register for account
 @app.route('/register', methods=['POST', 'GET'])
 def register_user():
     """Register a user."""
@@ -57,19 +59,18 @@ def register_user():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        # Need to check if user is an existing user
+        # Check if user is exists
         existing_user = crud.get_user_by_email('email')
 
-        # if user is registered but not logged in
+        # If the user is registered but not logged in, redirect the user to login
         if existing_user:
-            # Display a message prompting the user to login
+            # Display a message asking the user to login
             flash('A user account already exists with this email. Please log into your account.')
             # Take user to the login form
             return redirect('/login')
 
-        # Create and add the new user to the database
+        # Add new user to the database
         new_user = crud.add_new_user(fname, lname, email, password)
-        # db.session.commit()
 
         # Save user to session
         session['user_id'] = new_user.user_id
@@ -88,25 +89,29 @@ def view_profile():
     if 'user_id' not in session:
         flash(f'Please log in to view your profile.')
         return redirect('/login')
-    #  Get the user id from the session
-    user_id = (session['user_id'])
-    # pass user id from session to crud function
-    user = crud.get_user_by_id(user_id)
-    return render_template('profile.html', user=user)
-    # return render_template("profile.html")
 
-@app.route('/add_prescription', methods=['POST'])
+    user_id = (session['user_id'])
+
+    # Pass user id to crud function
+    user = crud.get_user_by_id(user_id)
+
+    # Take user to profile page
+    return render_template('profile.html', user=user)
+
+# Route for user to add a prescription
+@app.route('/add_prescription', methods=['GET','POST'])
 def add_prescription():
 
-    # prescription attributes (drugrx name, dosage_amount, frequency_taken)
-    drugrx_name = request.form.get('drugrx_name')
-    dosage_amount = request.form.get('dosage_amount')
-    frequency_taken = request.form.get('frequency_taken')
+    if request.method == 'POST':
+        # prescription attributes (drugrx name, dosage_amount, frequency_taken)
+        drugrx_name = request.form.get('drugrx_name')
+        dosage_amount = request.form.get('dosage_amount')
+        frequency_taken = request.form.get('frequency_taken')
 
-    # Check if user saved in session
-    user = session.get('user_id')
-    # if the user exists, get user id from database
-    existing_user = crud.get_user_by_id('user_id')
+        # Check if user saved in session
+        user_id = session.get('user_id')
+        # if the user exists, get user id from database
+        existing_user = crud.get_user_by_id(user_id)
 
     # if user exists:
     if existing_user:
@@ -117,16 +122,14 @@ def add_prescription():
         # Save db changes
         db.session.commit()
         # Display confirmation that the changes were successful
-        flash('New prescription had been added successfully.')
+        flash('New prescription added successfully.')
 
     # if the user doesn't exist, display a message to prompt user to login or register
     else:
         flash('Please login or register to manage your prescriptions.')
+
     # redirect user to login
     return redirect('/')
-
-
-
 
 
 # Edit a prescription
@@ -145,7 +148,7 @@ def add_prescription():
 
 
 
-# If script is main program, initiate app and run code
+# If script is main program, initiate and run
 if __name__ == "__main__":
     connect_to_db(app) # Establish connection to the database
     app.run(debug=True) # Run Flask app and enable debugging

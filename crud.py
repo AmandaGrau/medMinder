@@ -11,6 +11,7 @@ def add_new_user(fname, lname, email, password):
     db.session.commit()
 
     return user
+
 # Function to create a new user with email and password
 def register_user(fname, lname, email, password):
     """Create and return a new user."""
@@ -19,7 +20,7 @@ def register_user(fname, lname, email, password):
 
     return user
 
-# Function to get all usersujj
+# Function to get all users
 def get_all_users():
     """Return all users"""
 
@@ -27,7 +28,7 @@ def get_all_users():
 
 # Function to get a user by user_id
 def get_user_by_id(user_id):
-    """Return a user by user id."""
+    """Return a user by id."""
 
     return User.query.get(user_id)
 
@@ -68,21 +69,21 @@ def get_all_prescriptions():
 def get_prescription_by_drug_name(drugrx_name):
     """Return prescription by drug name."""
 
-    return Prescription.query.filter_by(drugrx_name).first()
+    return Prescription.query.filter_by(drugrx_name=drugrx_name).first()
 
 
 # Function to get a prescription by dosage_amount
 def get_prescription_by_dosage(dosage_amount):
     """Return prescription by dosage amount."""
 
-    return Prescription.query.filter_by(dosage_amount).first()
+    return Prescription.query.filter_by(dosage_amount=dosage_amount).first()
 
 
 # Function to get a prescription by frequency taken
 def get_prescription_by_frequency(frequency_taken):
     """Return prescription by frequency taken."""
 
-    return Prescription.query.filter_by(frequency_taken).first()
+    return Prescription.query.filter_by(frequency_taken=frequency_taken).first()
 
 
 # Function to get all (API) meds
