@@ -95,7 +95,7 @@ def view_profile():
     # Pass user id to crud function
     user = crud.get_user_by_id(user_id)
 
-    # Take user to profile page
+    # Take user to the profile page
     return render_template('profile.html', user=user)
 
 # Route for user to add a prescription
@@ -113,30 +113,42 @@ def add_prescription():
         # if the user exists, get user id from database
         existing_user = crud.get_user_by_id(user_id)
 
-        # create new prescrition
-        prescription = crud.create_prescription(drugrx_name, dosage_amount, frequency_taken)
-        # add new prescrition to db prescriptions
-        user.prescriptions.append(prescription)
-        # Save db changes
-        db.session.commit()
-        # Display confirmation that the changes were successful
-        flash('New prescription added successfully.')
+        # Check if user exists
+        if existing_user:
+            # create new prescrition and add to user's profile
+            prescription = crud.create_prescription(drugrx_name, dosage_amount, frequency_taken)
+            existing_user.prescriptions.append(prescription)
+            # Save db changes
+            db.session.commit()
+            # Display confirmation prescription was added
+            flash('New prescription added successfully.')
+            # redirect to updated profile
+            return redirect('profile')
+        
+        # If user doesn't exist
+        else:
+            # Display alert message
+            flash('Sorry, user not found.')
+            # dedirect user to login or register
 
-    # Process request to search Open FDA
+    # Handle search request to Open FDA
     else:
         search_query = request.args.get('search_query')
         if search_query:
             results= rx_search.query_openfda(search_query)
+            # Render add_prescription template for POST request
             return render_template('add_prescription.html', results=results)
-        return render_template('profile.html')
+        # Render same page for GET request without query
+        return render_template('add_prescription.html')
 
-    # # redirect user to 
-    # return redirect('/')
+    # Default page to be rendered for add_prescription route
+    return render_template('add_prescription.html')
 
-# Add route to handle when user selects a med in js fetch and response function
+# Route that handles user searching for and selcting a med - ties to fetch and response function
 @app.route('/select_prescription', methods =['POST'])
 def select_prescription():
 
+    # Get data sent with POST request and extract brand name, generic name, and unii
     data = request.json
     brand_name = data.get('brandName')
     generic_name = data.get('genericName')
@@ -147,11 +159,24 @@ def select_prescription():
 
     # If user not saved in session, display message asking user to login (dict format)
     if not user_id:
-        return jsonify({'Error':'Please try loggin in'})
+        return jsonify({'Error':'Please try logging in'})
 
-# Create new prescription for user
-# Find a medication in OpenFDA
-# Link medication to user
+    # Query database with unqiue code to determine if a medication already exists
+    medication = Medication.query.filter_by(unii=unii).first()
+
+    # If med doesn't exist, create and add med to the database
+    if not medication:
+        medication = Medication(brand_name=brand_name, generic_name=generic_name, unii=unii)
+        db.session.add(medication)
+        db.session.commit()
+
+    # Create and add a new prescription, linking it to the newly added medication and to the user
+    prescription = Prescription(user_id=user_id, medication_id=medication.medication_id)
+    db.session.add(prescription)
+    db.session.commit()
+
+    # Return JSON response confirming prescription being added
+    return jsonify({'brandName': brand_name, 'message':'New prescription has been added successfully'})
 
 
 # Route for user to edit a prescription

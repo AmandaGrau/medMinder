@@ -16,7 +16,7 @@ def query_openfda(brand_name):
         api_data = response.json()
 
         # Variable to store extracted data from the response
-        med_results = []
+        results = []
         # loop over response to get brand name, generic name, and unii code, and store results
         for item in api_data.get("results", []):
             openfda = item.get("openfda", {})
@@ -26,8 +26,8 @@ def query_openfda(brand_name):
                 "unii": openfda.get("unii", [""])[0]
             }
             # Add extracted data to med_results
-            med_results.append(result)
-        return med_results
+            results.append(result)
+        return results
     # return an empty if there is an error
     else:
         return []
