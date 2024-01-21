@@ -1,10 +1,10 @@
 """View medMinder site."""
-from flask import Flask, session, render_template, url_for, request, flash, redirect
+from flask import Flask, session, render_template, url_for, request, flash, redirect, jsonify
 # Import SQLAlchemy constructor functionn
 from flask_sqlalchemy import SQLAlchemy
 from model import connect_to_db, db
 import crud
-
+import rx_search
 from jinja2 import StrictUndefined
 
 import os
@@ -113,8 +113,6 @@ def add_prescription():
         # if the user exists, get user id from database
         existing_user = crud.get_user_by_id(user_id)
 
-    # if user exists:
-    if existing_user:
         # create new prescrition
         prescription = crud.create_prescription(drugrx_name, dosage_amount, frequency_taken)
         # add new prescrition to db prescriptions
@@ -124,15 +122,39 @@ def add_prescription():
         # Display confirmation that the changes were successful
         flash('New prescription added successfully.')
 
-    # if the user doesn't exist, display a message to prompt user to login or register
+    # Process request to search Open FDA
     else:
-        flash('Please login or register to manage your prescriptions.')
+        search_query = request.args.get('search_query')
+        if search_query:
+            results= rx_search.query_openfda(search_query)
+            return render_template('add_prescription.html', results=results)
+        return render_template('profile.html')
 
-    # redirect user to login
-    return redirect('/')
+    # # redirect user to 
+    # return redirect('/')
+
+# Add route to handle when user selects a med in js fetch and response function
+@app.route('/select_prescription', methods =['POST'])
+def select_prescription():
+
+    data = request.json
+    brand_name = data.get('brandName')
+    generic_name = data.get('genericName')
+    unii = data.get('unii')
+
+    # Check if user saved to session
+    user_id = session.get('user_id')
+
+    # If user not saved in session, display message asking user to login (dict format)
+    if not user_id:
+        return jsonify({'Error':'Please try loggin in'})
+
+# Create new prescription for user
+# Find a medication in OpenFDA
+# Link medication to user
 
 
-# Edit a prescription
+# Route for user to edit a prescription
 # @app.route('/edit_prescription', methods='POST')
 # def edit_prescription():
 

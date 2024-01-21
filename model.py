@@ -67,10 +67,10 @@ class Medication(db.Model):
 
     __tablename__ = "medications"
 
-    # drugs_API_id = db.Column(db.String)
-    medication_id = db.Column(db.Integer, primary_key=True)
+    medication_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     brand_name = db.Column(db.String)
     generic_name = db.Column(db.String)
+    unii = db.Column(db.String)
 
     prescriptions = db.relationship("Prescription", back_populates="medication")
 

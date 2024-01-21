@@ -3,25 +3,32 @@
 
 {% block body %}
 
-    <h1>User Profile</h1>
+    <h1>Profile Details</h1>
 
 <!-- Add if statement to check for user -->
 <!-- {% if user %} -->
   <!-- <p>Hello, {{ user.fname }}</p>
 {% else %}
   <p>Please login to your account.</p>
-{% endif %} -->
-
+{% endif %}
+ -->
 
 <!-- Display user first name, last name, email -->
     <p>First Name: {{ user.fname }}</p>
     <p>Last Name: {{ user.lname }}</p>
     <p>Email: {{ user.email }}</p>
 
+    <h1>Add a Prescription</h1>
+
+    <form action="/add_prescription" method="get">
+      <input type="text" name="search_query" placeholder="Enter prescription name">
+      <button type="submit">Search</button>
+    </form>
+
 
 <!-- Display the User's prescriptions -->
-<h2>Prescriptions:</h2>
-
+<h2>Prescription List:</h2>
+This should display the user's prescription list
 <table>
   <thead>
     <!-- Table rows/headers -->
@@ -41,6 +48,13 @@
         <td>{{ prescription.frequency_taken }}</td>
         <!-- link to db -->
         
+        <!-- <tr> onclick="selectMedication"('{{ result.brand_name }}', '{{ result.generic_name }}', '{{ result.unii }}')
+          <td>{{ result.brand_name }}</td>
+          <td>{{ result.generic_name }}</td>
+          <td>{{ result.unii }}</td> -->
+
+
+
       </tr>
     {% endfor %}
   </tbody>
