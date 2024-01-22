@@ -124,7 +124,7 @@ def add_prescription():
             flash('New prescription added successfully.')
             # redirect to updated profile
             return redirect('profile')
-        
+
         # If user doesn't exist
         else:
             # Display alert message
@@ -144,6 +144,22 @@ def add_prescription():
     # Default page to be rendered for add_prescription route
     return render_template('add_prescription.html')
 
+
+# Add a route to display query results in the user profile
+@app.route('/profile')
+def display_to_profile():
+    user_id = session.get('user_id')
+    existing_user = crud.get_user_by_id(user_id)
+
+    if existing_user:
+        # Retrieve User's prescriptions
+        user_prescriptions = existing_user.prescriptions
+        return render_template('profile.html', user=existing_user, presciptions=user_prescriptions)
+
+    else:
+        flash('Please register or login to manage prescriptions')
+
+
 # Route that handles user searching for and selcting a med - ties to fetch and response function
 @app.route('/select_prescription', methods =['POST'])
 def select_prescription():
@@ -154,42 +170,48 @@ def select_prescription():
     generic_name = data.get('genericName')
     unii = data.get('unii')
 
-    # Check if user saved to session
+    # Check if user logged in session
     user_id = session.get('user_id')
+    # If user logged in, get user from the database
+    if user_id:
+        user = crud.get_user_by_id(user_id)
 
     # If user not saved in session, display message asking user to login (dict format)
-    if not user_id:
-        return jsonify({'Error':'Please try logging in'})
+    # if not user_id:
+        # return jsonify({'Error':'Please try logging in'})
 
     # Query database with unqiue code to determine if a medication already exists
-    medication = Medication.query.filter_by(unii=unii).first()
+    # medication = Medication.query.filter_by(unii=unii).first()
 
-    # If med doesn't exist, create and add med to the database
-    if not medication:
-        medication = Medication(brand_name=brand_name, generic_name=generic_name, unii=unii)
-        db.session.add(medication)
-        db.session.commit()
+    # # If med doesn't exist, create and add med to the database
+    # if not medication:
+    #     medication = Medication(brand_name=brand_name, generic_name=generic_name, unii=unii)
+    #     db.session.add(medication)
+    #     db.session.commit()
 
     # Create and add a new prescription, linking it to the newly added medication and to the user
-    prescription = Prescription(user_id=user_id, medication_id=medication.medication_id)
-    db.session.add(prescription)
-    db.session.commit()
+        prescription = crud.create_prescription(brand_name, generic_name, unii)
+        user.prescriptions.append(prescription)
+        db.session.commit()
 
-    # Return JSON response confirming prescription being added
-    return jsonify({'brandName': brand_name, 'message':'New prescription has been added successfully'})
+        # Return JSON response confirming prescription being added
+        return jsonify({'brandName': brand_name, 'message':'New prescription added successfully'})
 
+    # If user not logged in:
+    return jsonify({'Error':'Please try logging in'})
 
-# Route for user to edit a prescription
+# Add route for user to edit a prescription
 # @app.route('/edit_prescription', methods='POST')
 # def edit_prescription():
 
     # check if prescription is in db
-    # if prescription already exists, redirect to profile page where user can choose a prescription to edit
-    # if prescription doesn't exist, display message to user about prescription not existing
-    # redirect user to profile page to create a prescription
+    # if prescription already exists...
+    # redirect to prescriptions list where user can choose and edit a prescription
+    # if prescription doesn't exist, display 'not found' message to user
+    # redirect user to add a prescription
 
 
-# View list of all prescriptions
+# Add route for user to view all prescriptions
 # @app.route('/view_all_prescriptions', methods='POST')
 # def get_all_prescriptions():
 

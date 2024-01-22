@@ -1,9 +1,5 @@
 import requests
 
-# Notes and 'To Do':
-# install/import requests
-# relavent data: brand_name, gerneric_name, unii code
-
 # function that queries openfda with search term
 def query_openfda(brand_name):
     # variable to store search url for making requests to Open FDA
