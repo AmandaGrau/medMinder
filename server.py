@@ -103,6 +103,12 @@ def view_profile():
 def add_prescription():
 
     if request.method == 'POST':
+        # Test revisions to properly display query results to profile page
+        # if 'brandName' in request.form and 'genericName' in request.form and 'unii' in request.form:
+        #     brand_name = request.form['brandName']
+        #     generic_name = request.form['genericName']
+        #     unii = request.form['unii']
+
         # prescription attributes (drugrx name, dosage_amount, frequency_taken)
         drugrx_name = request.form.get('drugrx_name')
         dosage_amount = request.form.get('dosage_amount')
@@ -138,9 +144,10 @@ def add_prescription():
             results= rx_search.query_openfda(search_query)
             # Render add_prescription template for POST request
             return render_template('add_prescription.html', results=results)
-        # Render same page for GET request without query
-        return render_template('add_prescription.html')
 
+        # Render the same page for GET request without a query
+        return render_template('add_prescription.html')
+    
     # Default page to be rendered for add_prescription route
     return render_template('add_prescription.html')
 
@@ -160,11 +167,11 @@ def display_to_profile():
         flash('Please register or login to manage prescriptions')
 
 
-# Route that handles user searching for and selcting a med - ties to fetch and response function
+# Route to handle user selecting a med
 @app.route('/select_prescription', methods =['POST'])
 def select_prescription():
 
-    # Get data sent with POST request and extract brand name, generic name, and unii
+    # Get data with POST request and extract brand name, generic name, and unii
     data = request.json
     brand_name = data.get('brandName')
     generic_name = data.get('genericName')

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Prescriptions{% endblock %}
+
+{% block body %}
+
+<form action="/add_prescription" method="get">
+    <input type="text" name="search_query" placeholder="Enter medication name">
+    <button type="submit">Search</button>
+  </form>
+
+    {% if results %}
+        <table>
+            <tr> 
+                <!-- Columns -->
+                <th>Brand Name</th>
+                <th>Generic Name</th>
+                <th>UNII Code</th>
+                <th>Action</th>
+              </tr>
+            {% for result in results %}
+                  <td>{{ result.brand_name }}</td>
+                  <td>{{ result.generic_name }}</td>
+                  <td>{{ result.unii }}</td>
+                  <td>
+                    <!-- Event trigger for user selection of med -->
+                  </td>
+              </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}
+
+<script>
+function selectPrescription(brand_name, generic_name, unii) {
+    // Make POST request to add Prescription
+    fetch('/add_prescription', {
+        method: 'POST',
+        headers: {
+            //'Content-Type': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        // body: JSON.stringify({ brandName, genericName, unii}),
+       body: newURLSearchParams({ 
+            'brandName': brand_name, 
+            'genericName': generic_name, 
+            'unii':unii, 
+        })
+    })
+    // 1st promise parses data
+    .then(response => response.json())
+    // 2nd promise handles the parsed data
+    .then(data => {
+
+        // Display alert confirming prescription was added
+        alert('Prescription has been added:' + data.brandName);
+        // After prescription is added, display changes in profile page
+        window.location.href = '/profile';
+    })
+    // Log errors
+    .catch((error) => {
+        console.error('Urrrg... error!:', error);
+    })
+}
+</script>

@@ -3,59 +3,44 @@
 
 {% block body %}
 
-    <h2>Account Details</h2>
+  <!-- Welcome the user -->
+  <h1>Welcome, {{ user.fname }}!</h1>
+  <!-- display the user's email -->
+  <p>Email: {{ user.email }}</p><br><br>
 
-<!-- Display user first name, last name, email -->
-    <p>First Name: {{ user.fname }}</p>
-    <p>Last Name: {{ user.lname }}</p>
-    <p>Email: {{ user.email }}</p>
-
-
+<h2>Presciption List</h2>
 <!-- Display the User's prescriptions -->
-<h2>Prescription List:</h2>
 <table>
-<thead>
-    <!-- Table rows/headers -->
-      <th>Name</th>
-      <th></th>
-      <th></th>
-      <th>Dosage</th>
-      <th></th>
-      <th></th>
-      <th>Frequency</th>
-      <th></th>
-      <th></th>
+  <thead>
+    <tr>
+      <th>Drug Name</th>
+      <th>Dosage Amount</th>
+      <th>Frequency Taken</th>
     </tr>
   </thead>
   <tbody>
     <!-- Display prescription details -->
     {% for prescription in user.prescriptions %}
-      <tr>
-        <td>{{ prescription.drugrx_name }}</td>
-        <td></td>
-        <td></td>
-        <td>{{ prescription.dosage_amount }}</td>
-        <td></td>
-        <td></td>
-        <td>{{ prescription.frequency_taken }}</td>
-        <td></td>
-        <td></td>
-      </tr>
+    <tr>
+      <td>{{ prescription.drugrx_name }}</td>
+      <td>{{ prescription.dosage_amount }}</td>
+      <td>{{ prescription.frequency_taken }}</td>
+    </tr>
     {% endfor %}
   </tbody>
-</table>
+</table><br><br>
 
 <!-- Add a form for user to add a prescription -->
-<h2>Add a Prescription</h2>
+<h2>Add a Medication</h2>
 <form method="POST" action="/add_prescription">
     <label for="drugrx_name">Drug Name</label>
-    <input type="text" id="drugrx_name" name="drugrx_name">
+    <input type="text" id="drugrx_name" name="drugrx_name" required><br>
     <label for="dosage_amount">Dosage Amount</label>
-    <input type="text" id="dosage_amount" name="dosage_amount">
+    <input type="text" id="dosage_amount" name="dosage_amount" required><br>
     <label for="frequency_taken">Frequency Taken</label>
-    <input type="text" id="frequency_taken" name="frequency_taken">
+    <input type="text" id="frequency_taken" name="frequency_taken" required><br>
     <input type="submit" value="Add Prescription">
-</form>
+</form><br>
 
 <!-- Add logout option for user -->
 <a href="/logout">Logout</a>
