@@ -6,7 +6,6 @@ from model import connect_to_db, db
 import crud
 import rx_search
 from jinja2 import StrictUndefined
-
 import os
 
 app = Flask(__name__)
@@ -31,9 +30,6 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        # user_id = session.get('user_id')
-        # user = crud.get_user_by_id(user_id)
-
         user = crud.get_user_by_email(email)
 
         if user and user.password == password:
@@ -42,7 +38,7 @@ def login():
             flash(f"Hello, {user.fname}!")
         return redirect('/profile')
 
-    # If user login attempt fails, display a message asking the user to try logging in again
+    # If login fails, display a message asking the user to try logging in again
     else:
         flash('The email or password you entered is incorrect. Please try again.')
     return render_template('homepage.html')
@@ -62,7 +58,7 @@ def register_user():
         # Check if user is exists
         existing_user = crud.get_user_by_email('email')
 
-        # If the user is registered but not logged in, redirect the user to login
+        # If user is registered but not logged in, redirect user to login
         if existing_user:
             # Display a message asking the user to login
             flash('A user account already exists with this email. Please log into your account.')
@@ -76,39 +72,35 @@ def register_user():
         session['user_id'] = new_user.user_id
         # Display message confirming successful login
         flash(f'Welcome, {fname}! Thank you for registering with medMinder.')
-        # If login successful, redirect to profile page (not yet created)
+        # If login successful, redirect to profile page
         return redirect ('/profile')
 
     return render_template('register.html')
 
-# Route for user to view profile
+
+# Route to view profile
 @app.route('/profile')
 def view_profile():
     """View user profile."""
 
-    if 'user_id' not in session:
-        flash(f'Please log in to view your profile.')
-        return redirect('/login')
+    user_id = session.get('user_id')
+    existing_user = crud.get_user_by_id(user_id)
 
-    user_id = (session['user_id'])
+    if existing_user:
+        # Retrieve User's prescriptions
+        user_prescriptions = existing_user.prescriptions
 
-    # Pass user id to crud function
-    user = crud.get_user_by_id(user_id)
+    # Empty list to store results
+    results = []
 
-    # Take user to the profile page
-    return render_template('profile.html', user=user)
+    return render_template('profile.html', user=existing_user, results=results)
+
 
 # Route for user to add a prescription
-@app.route('/add_prescription', methods=['GET','POST'])
+@app.route('/profile', methods=['GET','POST'])
 def add_prescription():
 
     if request.method == 'POST':
-        # Test revisions to properly display query results to profile page
-        # if 'brandName' in request.form and 'genericName' in request.form and 'unii' in request.form:
-        #     brand_name = request.form['brandName']
-        #     generic_name = request.form['genericName']
-        #     unii = request.form['unii']
-
         # prescription attributes (drugrx name, dosage_amount, frequency_taken)
         drugrx_name = request.form.get('drugrx_name')
         dosage_amount = request.form.get('dosage_amount')
@@ -152,60 +144,45 @@ def add_prescription():
     return render_template('add_prescription.html')
 
 
-# Add a route to display query results in the user profile
-@app.route('/profile')
-def display_to_profile():
-    user_id = session.get('user_id')
-    existing_user = crud.get_user_by_id(user_id)
+# # Route to display query results on profile page
+# @app.route('/profile')
+# def display_to_profile():
 
-    if existing_user:
-        # Retrieve User's prescriptions
-        user_prescriptions = existing_user.prescriptions
-        return render_template('profile.html', user=existing_user, presciptions=user_prescriptions)
-
-    else:
-        flash('Please register or login to manage prescriptions')
 
 
 # Route to handle user selecting a med
 @app.route('/select_prescription', methods =['POST'])
 def select_prescription():
 
-    # Get data with POST request and extract brand name, generic name, and unii
+    # Get data and extract brand name, generic name, and unii
     data = request.json
     brand_name = data.get('brandName')
     generic_name = data.get('genericName')
     unii = data.get('unii')
 
-    # Check if user logged in session
+    # Check if user in session
     user_id = session.get('user_id')
     # If user logged in, get user from the database
     if user_id:
         user = crud.get_user_by_id(user_id)
 
-    # If user not saved in session, display message asking user to login (dict format)
-    # if not user_id:
-        # return jsonify({'Error':'Please try logging in'})
-
-    # Query database with unqiue code to determine if a medication already exists
-    # medication = Medication.query.filter_by(unii=unii).first()
-
-    # # If med doesn't exist, create and add med to the database
-    # if not medication:
-    #     medication = Medication(brand_name=brand_name, generic_name=generic_name, unii=unii)
-    #     db.session.add(medication)
-    #     db.session.commit()
-
-    # Create and add a new prescription, linking it to the newly added medication and to the user
+        # Add a new prescription which is linked to medication and to user
         prescription = crud.create_prescription(brand_name, generic_name, unii)
         user.prescriptions.append(prescription)
         db.session.commit()
 
-        # Return JSON response confirming prescription being added
+        # Return JSON response confirming prescription added
         return jsonify({'brandName': brand_name, 'message':'New prescription added successfully'})
 
     # If user not logged in:
     return jsonify({'Error':'Please try logging in'})
+
+
+if __name__ == "__main__":
+    connect_to_db(app)
+    app.run(debug=True)
+
+
 
 # Add route for user to edit a prescription
 # @app.route('/edit_prescription', methods='POST')
@@ -217,14 +194,3 @@ def select_prescription():
     # if prescription doesn't exist, display 'not found' message to user
     # redirect user to add a prescription
 
-
-# Add route for user to view all prescriptions
-# @app.route('/view_all_prescriptions', methods='POST')
-# def get_all_prescriptions():
-
-
-
-# If script is main program, initiate and run
-if __name__ == "__main__":
-    connect_to_db(app) # Establish connection to the database
-    app.run(debug=True) # Run Flask app and enable debugging

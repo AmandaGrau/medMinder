@@ -8,7 +8,8 @@
   <!-- display the user's email -->
   <p>Email: {{ user.email }}</p><br><br>
 
-<h2>Presciption List</h2>
+
+<h2>Your Presciptions</h2>
 <!-- Display the User's prescriptions -->
 <table>
   <thead>
@@ -30,8 +31,46 @@
   </tbody>
 </table><br><br>
 
+<!-- Add an input form for user to search a medication -->
+<form method="GET" onsubmit="searchMedication(event)">
+  <input type="text" id="search_query" name="search_query"
+  placeholder="Enter a medication name">
+  <button type="submit">Search</button>
+</form>
+
+
+<h2>Search Results</h2>
+  <table>
+    <tr>
+      <!-- Column headers -->
+      <th>Brand Name</th>
+      <th>Generic Name</th>
+      <th>Unii Code</th>
+    </tr>
+
+    <!-- Search results -->
+  {% if result %}
+    {% for result in results %}
+      <td>{{ result.brand_name }}</td>
+      <td>{{ result.generic_name }}</td>
+      <td>{{ result.unii }}</td>
+      <!-- Add event trigger for when user selects a med - navigates to same page -->
+      <td><a href="#" onclick="selectPrescription('{{result.brand_name}}','{{result.generic_name}}','{{result.unii}}')">Add to Prescriptions</a></td>
+    </tr>
+    {% endfor %}
+  {% endif %}
+  </table>
+{% endblock %}
+
+<!-- User logout -->
+<a href="/logout">Logout</a>
+
+
+
+
+<!-- This option works, but limited to user simply adding a med - doesn't return a query -->
 <!-- Add a form for user to add a prescription -->
-<h2>Add a Medication</h2>
+<!-- <h2>Add a Medication</h2>
 <form method="POST" action="/add_prescription">
     <label for="drugrx_name">Drug Name</label>
     <input type="text" id="drugrx_name" name="drugrx_name" required><br>
@@ -40,9 +79,4 @@
     <label for="frequency_taken">Frequency Taken</label>
     <input type="text" id="frequency_taken" name="frequency_taken" required><br>
     <input type="submit" value="Add Prescription">
-</form><br>
-
-<!-- Add logout option for user -->
-<a href="/logout">Logout</a>
-
-{% endblock %}
+</form><br> -->
