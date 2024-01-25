@@ -1,4 +1,4 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap'); */
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 
 * {
     margin: 0;
@@ -8,18 +8,16 @@
 }
 
 /* body of page */
-body {
+/* body {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     background-color: cornflowerblue;
-    /* background-size: cover;
-    background-position: center; */
-}
+} */
 
 /* Login container box with input boxes and login button */
-.wrapper {
+/* .wrapper {
     width: 420px;
     background: turquoise;
     border: 2px solid rgb(255, 255, 255, .2);
@@ -28,66 +26,81 @@ body {
     color: #fff;
     border-radius: 10px;
     padding: 30px 40px;
-}
-
-/* Login header in container*/
-.wrapper h1 {
-    font-size: 36px;
-    text-align: center;
-}
-
-/* Inner containers surrounding text and password input boxes */
-.wrapper .input-box {
-    position: relative;
-    width: 100px;
-    height: 50px;
-    margin: 30px 0;
-}
-
-/* .wrapper .input-box {
-    position: relative;
-    width: 100px;
-    height: 50px;
-    margin: 30px;
 } */
 
+/* Login header in container*/
+/* .wrapper h1 {
+    font-size: 36px;
+    text-align: center;
+} */
+
+/* Inner containers surrounding text and password input boxes */
+/* .wrapper .input-box {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    margin: 30px 0;
+}
+ */
+
 /* Email and Password input text boxes */
-.input-box input{
-    width: 100px;
-    height: 100px;
+/* .input-box input{ */
+    /* Fills the container */
+    /* width: 100%;
     background: transparent;
     border: none;
     outline: none;
-    border: 2px solid rgb(255, 255, 255, .2);
-    border-radius: 40px;
+    border: 2px solid rgb(255, 255, 255, 0.2);
+    border-radius: 10px;
     font-size: 16px;
     color: #fff;
-    padding: 20px 45px 20px 20px;
+    padding: 10px 20px;
+} */
+
+/* Email and Password input text boxes */
+/* .input-box input[type="password"]
+{
+    /* Fills the container */
+    /* width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid rgb(255, 255, 255, 0.2);
+    border-radius: 10px;
+    font-size: 16px;
+    color: #fff;
+    padding: 10px 20px;
+} */
+
+/* .element-selector {
+    box-sizing: border-box;
 }
 
 /* Font color inside input text boxes */
-.input-box input::placeholder {
+/* .input-box input::placeholder {
     color: #fff;
-}
+} */
 
 /* Email/Password icons */
 /* <i class="bi bi-envelope-at-fill"></i>
 <i class="bi bi-file-lock2-fill"></i> */
-.input-box i {
+/* .input-box i {
     position: absolute;
     right: 20px;
     top: 50px;
     transform: translateY(-50%);
     font-size: 20px;
-}
+} */
 
-/* password-options */
+
+
+/* password-options
 .wrapper .password-options {
     display: flex;
     justify-content: space-between;
     font-size: 14.5px;
     margin: -15px 0 15px;
-}
+} */
 
 /* remember me checkbox */
 /* .password-options label input {
@@ -105,9 +118,9 @@ body {
     text-decoration: underline;
 } */
 
-.wrapper .btn {
+/* .wrapper .btn {
     width: 100%;
-    height: 45px;
+    height: 40px;
     background: #fff;
     border: none;
     outline: none;
@@ -120,7 +133,7 @@ body {
 }
 
 /* create account link */
-.wrapper .register-link {
+/* .wrapper .register-link {
     font-size: 14.5px;
     text-align: center;
     margin: 20px 0 15px;
@@ -130,8 +143,8 @@ body {
     color: #fff;
     text-decoration: none;
     font-weight: 600;
-}
+} */
 
-.register-link p a:hover {
+/* .register-link p a:hover {
     text-decoration: underline;
-}
+} */

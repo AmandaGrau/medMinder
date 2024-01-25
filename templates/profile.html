@@ -31,13 +31,17 @@
   </tbody>
 </table><br><br>
 
-<!-- Add an input form for user to search a medication -->
-<form method="GET" onsubmit="searchMedication(event)">
+<!-- Add an input form for user to search a medication  -->
+<!-- <form action="/add_prescription" method="get" onclick="searchMedication(event)">
+<input type="text" id="search_query" name="search_query" placeholder="Enter a medication name"> -->
+
+
+<form id="med_search">
   <input type="text" id="search_query" name="search_query"
   placeholder="Enter a medication name">
-  <button type="submit">Search</button>
+  <button type="submit" id="med_search_submit">Search</button>
 </form>
-
+<div id="'med_search_results"></div>
 
 <h2>Search Results</h2>
   <table>
@@ -49,34 +53,21 @@
     </tr>
 
     <!-- Search results -->
-  {% if result %}
+  {% if results %}
     {% for result in results %}
       <td>{{ result.brand_name }}</td>
       <td>{{ result.generic_name }}</td>
       <td>{{ result.unii }}</td>
-      <!-- Add event trigger for when user selects a med - navigates to same page -->
+      <!-- Event trigger for when user selects a med - should show on same page -->
       <td><a href="#" onclick="selectPrescription('{{result.brand_name}}','{{result.generic_name}}','{{result.unii}}')">Add to Prescriptions</a></td>
     </tr>
     {% endfor %}
   {% endif %}
   </table>
+  <script src="/static/med_search.js"></script>
+
 {% endblock %}
 
 <!-- User logout -->
 <a href="/logout">Logout</a>
 
-
-
-
-<!-- This option works, but limited to user simply adding a med - doesn't return a query -->
-<!-- Add a form for user to add a prescription -->
-<!-- <h2>Add a Medication</h2>
-<form method="POST" action="/add_prescription">
-    <label for="drugrx_name">Drug Name</label>
-    <input type="text" id="drugrx_name" name="drugrx_name" required><br>
-    <label for="dosage_amount">Dosage Amount</label>
-    <input type="text" id="dosage_amount" name="dosage_amount" required><br>
-    <label for="frequency_taken">Frequency Taken</label>
-    <input type="text" id="frequency_taken" name="frequency_taken" required><br>
-    <input type="submit" value="Add Prescription">
-</form><br> -->

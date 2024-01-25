@@ -12,7 +12,7 @@
                 <th>Brand Name</th>
                 <th>Generic Name</th>
                 <th>UNII Code</th>
-                <th>Action</th>
+                 <th>Action</th>
               </tr>
             {% for result in results %}
                   <td>{{ result.brand_name }}</td>
@@ -23,9 +23,8 @@
               </tr>
             {% endfor %}
         </table>
-    {% endif %}
+    {% endif %}502 
 {% endblock %}
-
 
 <!-- function to handle med selction event, and handle data request and response data -->
 <script>
@@ -43,8 +42,8 @@ function searchMedication(event) {
             // Check if 'results' in data
             if(data.results) {
 
-                // Logic to display data to search results table
-                // Variable to update search result
+                // Display data to search results table
+                // Update search result
                 let resultsTable = document.querySelector('#search-results-table');
                 // Prior search results need to be removed/replaced
                 resultsTable.innerHTML = '';
@@ -68,11 +67,7 @@ function searchMedication(event) {
             console.error('Error!:', error);
         });
 }
-</script>
 
-
-
-<script>
 function selectPrescription(brand_name, generic_name, unii) {
     // Create onject to send data in POST request
     const formData = new FormData();
@@ -99,4 +94,5 @@ function selectPrescription(brand_name, generic_name, unii) {
         console.error('Error:', error);
     });
 }
+
 </script>

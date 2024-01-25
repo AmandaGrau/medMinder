@@ -96,7 +96,7 @@ def view_profile():
     return render_template('profile.html', user=existing_user, results=results)
 
 
-# Route for user to add a prescription
+# Route for user to add a prescription 
 @app.route('/profile', methods=['GET','POST'])
 def add_prescription():
 
@@ -144,11 +144,6 @@ def add_prescription():
     return render_template('add_prescription.html')
 
 
-# # Route to display query results on profile page
-# @app.route('/profile')
-# def display_to_profile():
-
-
 
 # Route to handle user selecting a med
 @app.route('/select_prescription', methods =['POST'])
@@ -166,7 +161,7 @@ def select_prescription():
     if user_id:
         user = crud.get_user_by_id(user_id)
 
-        # Add a new prescription which is linked to medication and to user
+        # Add a new prescription which is linked to medication and user
         prescription = crud.create_prescription(brand_name, generic_name, unii)
         user.prescriptions.append(prescription)
         db.session.commit()
