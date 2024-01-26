@@ -68,9 +68,11 @@ class Medication(db.Model):
     __tablename__ = "medications"
 
     medication_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    unii = db.Column(db.String)
     brand_name = db.Column(db.String)
     generic_name = db.Column(db.String)
-    unii = db.Column(db.String)
+    dosage_form = db.Column(db.String)
+    strength = db.Column(db.Integer)
 
     prescriptions = db.relationship("Prescription", back_populates="medication")
 

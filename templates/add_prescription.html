@@ -2,13 +2,9 @@
 {% block title %}Prescriptions{% endblock %}
 {% block body %}
 
-<form action="/add_prescription" method="get" onclick="searchMedication(event)">
-<input type="text" id="search_query" name="search_query" placeholder="Enter a medication name">
-
     {% if results %}
         <table>
             <tr>
-                <!-- Columns -->
                 <th>Brand Name</th>
                 <th>Generic Name</th>
                 <th>UNII Code</th>
@@ -23,76 +19,5 @@
               </tr>
             {% endfor %}
         </table>
-    {% endif %}502 
+    {% endif %}
 {% endblock %}
-
-<!-- function to handle med selction event, and handle data request and response data -->
-<script>
-function searchMedication(event) {
-    // Prevent normal submission of the form
-    event.preventDefault();
-    // Get user search input
-    let searchQuery = document.querySelector('#search_query').value;
-    // Make a get request to search medications
-    fetch('/add_prescription?search_query=' + searchQuery)
-        // promised response with parsed data
-        .then(response => response.json())
-        // promised response handles the parsed data
-        .then(data => {
-            // Check if 'results' in data
-            if(data.results) {
-
-                // Display data to search results table
-                // Update search result
-                let resultsTable = document.querySelector('#search-results-table');
-                // Prior search results need to be removed/replaced
-                resultsTable.innerHTML = '';
-                // For new results, loop over each and add new row
-                data.results.forEach(result => {
-                    let row = resultsTable.insertRow();
-                    row.innerHTML = `
-                        <td>${result.brand_name}</td>
-                        <td>${result.generic_name}</td>
-                        <td>${result.unii}</td>
-                        <td><a href="#"
-                        onclick="selectPrescription"
-                        ('{{ result.brand_name }}', '{{ result.generic_name }}', '{{ result.unii }}')"
-                        >Add Prescription</a></td>
-                    `;
-                });
-            }
-        })
-        // if there are errors, log error in console
-        .catch(error => {
-            console.error('Error!:', error);
-        });
-}
-
-function selectPrescription(brand_name, generic_name, unii) {
-    // Create onject to send data in POST request
-    const formData = new FormData();
-    formData.append('brandName', brand_name);
-    formData.append('genericName', generic_name);
-    formData.append('unii', unii);
-
-    fetch('/add_prescription', 
-        {method: 'POST',
-        body: formData,
-    })
-    // 1st promise parses data
-    .then(response => response.json())
-    // 2nd promise handles the parsed data
-    .then(data => {
-
-        // Display alert confirming prescription added
-        alert('Prescription has been added:' + data.brandName);
-        // After prescription is added, display updated profile page
-        window.location.href = '/profile';
-    })
-    // Log errors in console
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-}
-
-</script>

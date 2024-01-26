@@ -90,64 +90,15 @@ def view_profile():
         # Retrieve User's prescriptions
         user_prescriptions = existing_user.prescriptions
 
-    # Empty list to store results
+    # Create list to store results
     results = []
 
     return render_template('profile.html', user=existing_user, results=results)
 
 
-# Route for user to add a prescription 
-@app.route('/profile', methods=['GET','POST'])
-def add_prescription():
-
-    if request.method == 'POST':
-        # prescription attributes (drugrx name, dosage_amount, frequency_taken)
-        drugrx_name = request.form.get('drugrx_name')
-        dosage_amount = request.form.get('dosage_amount')
-        frequency_taken = request.form.get('frequency_taken')
-
-        # Check if user saved in session
-        user_id = session.get('user_id')
-        # if the user exists, get user id from database
-        existing_user = crud.get_user_by_id(user_id)
-
-        # Check if user exists
-        if existing_user:
-            # create new prescrition and add to user's profile
-            prescription = crud.create_prescription(drugrx_name, dosage_amount, frequency_taken)
-            existing_user.prescriptions.append(prescription)
-            # Save db changes
-            db.session.commit()
-            # Display confirmation prescription was added
-            flash('New prescription added successfully.')
-            # redirect to updated profile
-            return redirect('profile')
-
-        # If user doesn't exist
-        else:
-            # Display alert message
-            flash('Sorry, user not found.')
-            # dedirect user to login or register
-
-    # Handle search request to Open FDA
-    else:
-        search_query = request.args.get('search_query')
-        if search_query:
-            results= rx_search.query_openfda(search_query)
-            # Render add_prescription template for POST request
-            return render_template('add_prescription.html', results=results)
-
-        # Render the same page for GET request without a query
-        return render_template('add_prescription.html')
-    
-    # Default page to be rendered for add_prescription route
-    return render_template('add_prescription.html')
-
-
-
 # Route to handle user selecting a med
-@app.route('/select_prescription', methods =['POST'])
-def select_prescription():
+@app.route('/profile', methods =['POST'])
+def add_prescription():
 
     # Get data and extract brand name, generic name, and unii
     data = request.json
@@ -176,8 +127,6 @@ def select_prescription():
 if __name__ == "__main__":
     connect_to_db(app)
     app.run(debug=True)
-
-
 
 # Add route for user to edit a prescription
 # @app.route('/edit_prescription', methods='POST')

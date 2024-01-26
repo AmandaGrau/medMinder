@@ -6,20 +6,15 @@
   <!-- Welcome the user -->
   <h1>Welcome, {{ user.fname }}!</h1>
   <!-- display the user's email -->
-  <p>Email: {{ user.email }}</p><br><br>
-
-
+  <p>Email: {{ user.email }}</p>
+<br>
 <h2>Your Presciptions</h2>
-<!-- Display the User's prescriptions -->
 <table>
-  <thead>
     <tr>
       <th>Drug Name</th>
       <th>Dosage Amount</th>
       <th>Frequency Taken</th>
     </tr>
-  </thead>
-  <tbody>
     <!-- Display prescription details -->
     {% for prescription in user.prescriptions %}
     <tr>
@@ -28,44 +23,29 @@
       <td>{{ prescription.frequency_taken }}</td>
     </tr>
     {% endfor %}
-  </tbody>
 </table><br><br>
-
-<!-- Add an input form for user to search a medication  -->
-<!-- <form action="/add_prescription" method="get" onclick="searchMedication(event)">
-<input type="text" id="search_query" name="search_query" placeholder="Enter a medication name"> -->
-
 
 <form id="med_search">
   <input type="text" id="search_query" name="search_query"
   placeholder="Enter a medication name">
   <button type="submit" id="med_search_submit">Search</button>
 </form>
-<div id="'med_search_results"></div>
+<div id="med_search_results"></div>
 
 <h2>Search Results</h2>
   <table>
+    <thead>
     <tr>
-      <!-- Column headers -->
       <th>Brand Name</th>
       <th>Generic Name</th>
       <th>Unii Code</th>
     </tr>
-
+    </thead>
     <!-- Search results -->
-  {% if results %}
-    {% for result in results %}
-      <td>{{ result.brand_name }}</td>
-      <td>{{ result.generic_name }}</td>
-      <td>{{ result.unii }}</td>
-      <!-- Event trigger for when user selects a med - should show on same page -->
-      <td><a href="#" onclick="selectPrescription('{{result.brand_name}}','{{result.generic_name}}','{{result.unii}}')">Add to Prescriptions</a></td>
-    </tr>
-    {% endfor %}
-  {% endif %}
+    <tbody id="results_table">
+      </tbody>
   </table>
   <script src="/static/med_search.js"></script>
-
 {% endblock %}
 
 <!-- User logout -->
