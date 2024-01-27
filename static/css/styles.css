@@ -1,4 +1,4 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 
 * {
     margin: 0;
@@ -7,18 +7,15 @@
     font-family: "Roboto";
 }
 
-/* body of page */
-/* body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: cornflowerblue;
-} */
+
+body {
+    background: #333 url('/static/img/shutterstock_2257487683.jpg');
+    background-size: cover;
+}
 
 /* Login container box with input boxes and login button */
 /* .wrapper {
-    width: 420px;
+    max-width 330px;
     background: turquoise;
     border: 2px solid rgb(255, 255, 255, .2);
     backdrop-filter: blur(20px);

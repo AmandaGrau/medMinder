@@ -3,10 +3,12 @@
 {% block body %}
 
   <!-- Welcome the user -->
-  <h1>Welcome, {{ user.fname }}!</h1>
+  <h1>Prescriptions Details</h1>
   <!-- display the user's email -->
   <p>Email: {{ user.email }}</p>
   <br>
+
+
 
 <h2>Your Presciptions</h2>
 <table>
@@ -20,6 +22,8 @@
   <tbody id="prescriptions_table">
   </tbody>
 </table>
+
+
 
 <form id="med_search">
   <input type="text" id="search_query" name="search_query"
