@@ -96,32 +96,32 @@ def view_profile():
     return render_template('profile.html', user=existing_user, results=results)
 
 
-# Route to handle user selecting a med
 @app.route('/profile', methods =['POST'])
 def add_prescription():
 
-    # Get data and extract brand name, generic name, and unii
-    data = request.json
-    brand_name = data.get('brandName')
-    generic_name = data.get('genericName')
-    unii = data.get('unii')
+        # Get data and extract brand name, generic name, and unii
+        med_result_data = request.json
+        brand_name = med_result_data.get('brandName')
+        generic_name = med_result_data.get('genericName')
+        # unii = med_result_data.get('unii')
 
-    # Check if user in session
-    user_id = session.get('user_id')
-    # If user logged in, get user from the database
-    if user_id:
-        user = crud.get_user_by_id(user_id)
+        # Check if user in session
+        user_id = session.get('user_id')
+        # If user logged in, get user from the database
+        if user_id:
+            user = crud.get_user_by_id(user_id)
 
-        # Add a new prescription which is linked to medication and user
-        prescription = crud.create_prescription(brand_name, generic_name, unii)
-        user.prescriptions.append(prescription)
-        db.session.commit()
+            # Add a new prescription which is linked to medication and user
+            prescription = crud.create_prescription(brand_name, generic_name)
+            user.prescriptions.append(prescription)
+            db.session.add(user)
+            db.session.commit()
 
-        # Return JSON response confirming prescription added
-        return jsonify({'brandName': brand_name, 'message':'New prescription added successfully'})
+            # Return JSON response confirming prescription added
+            return jsonify({'brandName': brand_name, 'message':'New prescription added successfully'})
 
     # If user not logged in:
-    return jsonify({'Error':'Please try logging in'})
+        return jsonify({'Error':'Please login'})
 
 
 if __name__ == "__main__":

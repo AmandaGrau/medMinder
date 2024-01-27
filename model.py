@@ -20,7 +20,7 @@ def connect_to_db(flask_app, db_uri="postgresql:///prescriptions", echo=True):
     print("Connected to db!")
 
 
-class User(db.Model):
+class User(db.Model):'p'
     """A user."""
 
     __tablename__ = "users"
@@ -36,7 +36,7 @@ class User(db.Model):
     def __repr__(self):
         """Show user info."""
 
-        return f"<fname:{self.fname} lname:{self.lname} email:{self.email} password:{self.password}>"
+        return f"<First:{self.fname} Last:{self.lname} Email:{self.email} Password:{self.password}>"
 
 
 # Table for user's prescribed medications
@@ -48,9 +48,9 @@ class Prescription(db.Model):
     prescription_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     medication_id = db.Column(db.Integer, db.ForeignKey("medications.medication_id"))
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    drugrx_name = db.Column(db.String)
-    dosage_amount = db.Column(db.Integer)
-    frequency_taken = db.Column(db.String)
+    brand_name = db.Column(db.String)
+    generic_name = db.Column(db.String)
+    unii = db.Column(db.String)
 
     user = db.relationship("User", back_populates="prescriptions")
     medication = db.relationship("Medication", back_populates="prescriptions")
@@ -58,7 +58,7 @@ class Prescription(db.Model):
     def __repr__(self):
         """Show prescribed dosge, frequency taken, and refill due date."""
 
-        return f"<NAME:{self.drugrx_name} DOSE:{self.dosage_amount} TAKEN:{self.frequency_taken}>"
+        return f"<Name:{self.brand_name} Dose:{self.generic_name} Frequency:{self.unii}>"
 
 
 # Table for all medications from API
@@ -67,12 +67,10 @@ class Medication(db.Model):
 
     __tablename__ = "medications"
 
-    medication_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    unii = db.Column(db.String)
+    medication_id = db.Column(db.Integer, primary_key=True)
     brand_name = db.Column(db.String)
     generic_name = db.Column(db.String)
-    dosage_form = db.Column(db.String)
-    strength = db.Column(db.Integer)
+    unii = db.Column(db.String)
 
     prescriptions = db.relationship("Prescription", back_populates="medication")
 
@@ -80,7 +78,7 @@ class Medication(db.Model):
     def __repr__(self):
         """Formal and generic medication names."""
 
-        return f"<Brand:{self.brand_name}, Generic:{self.generic_name}>"
+        return f"<Brand:{self.brand_name}, Generic:{self.generic_name} Unii:{self.unii}>"
 
 
 if __name__ == "__main__":

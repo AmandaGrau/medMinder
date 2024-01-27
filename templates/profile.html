@@ -7,29 +7,28 @@
   <h1>Welcome, {{ user.fname }}!</h1>
   <!-- display the user's email -->
   <p>Email: {{ user.email }}</p>
-<br>
+  <br>
+
+
 <h2>Your Presciptions</h2>
 <table>
+  <thead>
     <tr>
-      <th>Drug Name</th>
-      <th>Dosage Amount</th>
-      <th>Frequency Taken</th>
+      <th>Brand Name</th>
+      <th>Generic Name</th>
+      <th>Unii</th>
     </tr>
-    <!-- Display prescription details -->
-    {% for prescription in user.prescriptions %}
-    <tr>
-      <td>{{ prescription.drugrx_name }}</td>
-      <td>{{ prescription.dosage_amount }}</td>
-      <td>{{ prescription.frequency_taken }}</td>
-    </tr>
-    {% endfor %}
-</table><br><br>
+  </thead>
+  <tbody id="prescriptions_table">
+  </tbody>
+</table>
 
 <form id="med_search">
   <input type="text" id="search_query" name="search_query"
   placeholder="Enter a medication name">
   <button type="submit" id="med_search_submit">Search</button>
 </form>
+
 <div id="med_search_results"></div>
 
 <h2>Search Results</h2>
@@ -38,7 +37,7 @@
     <tr>
       <th>Brand Name</th>
       <th>Generic Name</th>
-      <th>Unii Code</th>
+      <th>Unii</th>
     </tr>
     </thead>
     <!-- Search results -->
