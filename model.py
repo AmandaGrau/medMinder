@@ -1,26 +1,21 @@
 """Models for prescription tracking app."""
 from datetime import datetime
 from flask import Flask, session, render_template, url_for, request, flash, redirect
-# Import SQLAlchemy constructor functionn
 from flask_sqlalchemy import SQLAlchemy
 
-# Create SQLAlchemy instance
 db = SQLAlchemy()
 
-# Connect flask app to database
 def connect_to_db(flask_app, db_uri="postgresql:///prescriptions", echo=True):
     flask_app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql:///{'prescriptions'}"
     flask_app.config["SQLALCHEMY_ECHO"] = True
     flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    # Initiate flask app
     db.app = flask_app
     db.init_app(flask_app)
-
     print("Connected to db!")
 
 
-class User(db.Model):'p'
+class User(db.Model):
     """A user."""
 
     __tablename__ = "users"

@@ -4,7 +4,6 @@ from flask import Flask, session, render_template, url_for, request, flash, redi
 from flask_sqlalchemy import SQLAlchemy
 from model import connect_to_db, db
 import crud
-import rx_search
 from jinja2 import StrictUndefined
 import os
 
@@ -103,7 +102,7 @@ def add_prescription():
         med_result_data = request.json
         brand_name = med_result_data.get('brandName')
         generic_name = med_result_data.get('genericName')
-        # unii = med_result_data.get('unii')
+        unii = med_result_data.get('unii')
 
         # Check if user in session
         user_id = session.get('user_id')
@@ -112,7 +111,7 @@ def add_prescription():
             user = crud.get_user_by_id(user_id)
 
             # Add a new prescription which is linked to medication and user
-            prescription = crud.create_prescription(brand_name, generic_name)
+            prescription = crud.create_prescription(brand_name, generic_name, unii)
             user.prescriptions.append(prescription)
             db.session.add(user)
             db.session.commit()
