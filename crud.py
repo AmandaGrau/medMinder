@@ -37,14 +37,18 @@ def get_user_by_email(email):
     return User.query.filter_by(email=email).first()
 
 # Function to create a new prescription
-def create_prescription(brand_name, generic_name, unii):
+def create_prescription(user_id, brand_name, generic_name, unii):
     """Create and return a new prescription"""
 
     prescription = Prescription(
+        user_id=user_id,
         brand_name=brand_name,
         generic_name=generic_name,
         unii=unii
         )
+
+    db.session.add(prescription)
+    db.session.commit()
 
     return prescription
 

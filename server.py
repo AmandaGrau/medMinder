@@ -1,4 +1,4 @@
-"""View medMinder site."""
+"""View site."""
 from flask import Flask, session, render_template, url_for, request, flash, redirect, jsonify
 # Import SQLAlchemy constructor functionn
 from flask_sqlalchemy import SQLAlchemy
@@ -70,7 +70,7 @@ def register_user():
         # Save user to session
         session['user_id'] = new_user.user_id
         # Display message confirming successful login
-        flash(f'Welcome, {fname}! Thank you for registering with medMinder.')
+        flash(f'Welcome, {fname}! Thank you for registering.')
         # If login successful, redirect to profile page
         return redirect ('/profile')
 
@@ -78,7 +78,7 @@ def register_user():
 
 
 # Route to view profile
-@app.route('/profile')
+@app.route('/profile', methods=['GET'])
 def view_profile():
     """View user profile."""
 
@@ -88,11 +88,13 @@ def view_profile():
     if existing_user:
         # Retrieve User's prescriptions
         user_prescriptions = existing_user.prescriptions
+    else:
+        flash('Error viewing prescriptions!')
 
     # Create list to store results
     results = []
 
-    return render_template('profile.html', user=existing_user, results=results)
+    return render_template('profile.html', user=existing_user, prescriptions=user_prescriptions)
 
 
 @app.route('/profile', methods =['POST'])
@@ -111,7 +113,7 @@ def add_prescription():
             user = crud.get_user_by_id(user_id)
 
             # Add a new prescription which is linked to medication and user
-            prescription = crud.create_prescription(brand_name, generic_name, unii)
+            prescription = crud.create_prescription(user_id, brand_name, generic_name, unii)
             user.prescriptions.append(prescription)
             db.session.add(user)
             db.session.commit()

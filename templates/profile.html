@@ -8,8 +8,6 @@
   <p>Email: {{ user.email }}</p>
   <br>
 
-
-
 <h2>Your Presciptions</h2>
 <table>
   <thead>
@@ -20,9 +18,15 @@
     </tr>
   </thead>
   <tbody id="prescriptions_table">
+    {% for prescription in prescriptions %}
+    <tr>
+      <td>{{ prescription.brand_name }}</td>
+      <td>{{ prescription.generic_name }}</td>
+      <td>{{ prescription.unii }}</td>
+    </tr>
+    {% endfor %}
   </tbody>
 </table>
-
 
 
 <form id="med_search">
