@@ -7,10 +7,12 @@
     font-family: "Roboto";
 }
 
-
 body {
     background: #333 url('/static/img/shutterstock_2257487683.jpg');
     background-size: cover;
+}
+tbody tr:nth-child(odd) {
+    background-color: rgb(208, 223, 232);
 }
 
 /* Login container box with input boxes and login button */

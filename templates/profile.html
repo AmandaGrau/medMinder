@@ -15,6 +15,8 @@
       <th>Brand Name</th>
       <th>Generic Name</th>
       <th>Unii</th>
+      <th>Dosage Form</th>
+      <th>Strength</th>
     </tr>
   </thead>
   <tbody id="prescriptions_table">
@@ -22,7 +24,12 @@
     <tr>
       <td>{{ prescription.brand_name }}</td>
       <td>{{ prescription.generic_name }}</td>
+      <td>{{ prescription.strength }}</td>
+      <td>{{ prescription.dosage_form }}</td>
       <td>{{ prescription.unii }}</td>
+      <td><button type="submit" id="{{ prescription.unii }}" 
+        class="edit-btn">Edit</button></td>
+      <td><button type="submit" id="{{ prescription.unii }}" class="delete-btn">Delete</button></td>
     </tr>
     {% endfor %}
   </tbody>
@@ -43,6 +50,8 @@
     <tr>
       <th>Brand Name</th>
       <th>Generic Name</th>
+      <th>Strength</th>
+      <th>Dosage Form</th>
       <th>Unii</th>
     </tr>
     </thead>

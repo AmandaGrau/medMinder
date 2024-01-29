@@ -46,6 +46,8 @@ class Prescription(db.Model):
     brand_name = db.Column(db.String)
     generic_name = db.Column(db.String)
     unii = db.Column(db.String)
+    dosage_form = db.Column(db.String)
+    strength = db.Column(db.String)
 
     user = db.relationship("User", back_populates="prescriptions")
     medication = db.relationship("Medication", back_populates="prescriptions")
@@ -53,10 +55,10 @@ class Prescription(db.Model):
     def __repr__(self):
         """Show prescribed dosge, frequency taken, and refill due date."""
 
-        return f"<Name:{self.brand_name} Dose:{self.generic_name} Frequency:{self.unii}>"
+        return f"<Brand:{self.brand_name} Generic:{self.generic_name} Unii:{self.unii} Form:{self.dosage_form} Strength:{self.strength}>"
 
 
-# Table for all medications from API
+# Medications queried from Open FDA
 class Medication(db.Model):
     """A medication."""
 
@@ -66,14 +68,15 @@ class Medication(db.Model):
     brand_name = db.Column(db.String)
     generic_name = db.Column(db.String)
     unii = db.Column(db.String)
+    dosage_form = db.Column(db.String)
+    strength = db.Column(db.String)
 
     prescriptions = db.relationship("Prescription", back_populates="medication")
-
 
     def __repr__(self):
         """Formal and generic medication names."""
 
-        return f"<Brand:{self.brand_name}, Generic:{self.generic_name} Unii:{self.unii}>"
+        return f"<Brand:{self.brand_name}, Generic:{self.generic_name} Unii:{self.unii} Form:{self.dosage_form} Strength:{self.strength}>"
 
 
 if __name__ == "__main__":

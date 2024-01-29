@@ -37,15 +37,16 @@ def get_user_by_email(email):
     return User.query.filter_by(email=email).first()
 
 # Function to create a new prescription
-def create_prescription(user_id, brand_name, generic_name, unii):
+def create_prescription(user_id, brand_name, generic_name, unii, dosage_form, strength):
     """Create and return a new prescription"""
 
     prescription = Prescription(
         user_id=user_id,
         brand_name=brand_name,
         generic_name=generic_name,
-        unii=unii
-        )
+        unii=unii,
+        dosage_form=dosage_form,
+        strength=strength)
 
     db.session.add(prescription)
     db.session.commit()
@@ -64,23 +65,35 @@ def get_all_prescriptions():
 
     return Prescription.query.all()
 
-# Function to get a prescription by drug name
-def get_prescription_by_drug_name(brand_name):
-    """Return prescription by drug name."""
+# Function to get a prescription by brand name
+def get_prescription_by_brand_name(brand_name):
+    """Return prescription by brand name."""
 
     return Prescription.query.filter_by(brand_name=brand_name).first()
 
-# Function to get a prescription by dosage_amount
-def get_prescription_by_dosage(generic_name):
-    """Return prescription by dosage amount."""
+# Function to get a prescription by generic name
+def get_prescription_by_generic_name(generic_name):
+    """Return prescription by generic amount."""
 
     return Prescription.query.filter_by(generic_name=generic_name).first()
 
-# Function to get a prescription by frequency taken
-def get_prescription_by_frequency(unii):
-    """Return prescription by frequency taken."""
+# Function to get a prescription by unii code
+def get_prescription_by_unii(unii):
+    """Return prescription by unii code."""
 
     return Prescription.query.filter_by(unii=unii).first()
+
+# Function to get a prescription by form taken
+def get_prescription_by_form(dosage_form):
+    """Return prescription by form."""
+
+    return Prescription.query.filter_by(dosage_form)
+
+# Function to get a prescription by form taken
+def get_prescription_by_strength(strength):
+    """Return prescription by form."""
+
+    return Prescription.query.filter_by(strength)
 
 
 if __name__ == "__main__":
