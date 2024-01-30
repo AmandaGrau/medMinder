@@ -42,6 +42,12 @@ def login():
         flash('The email or password you entered is incorrect. Please try again.')
     return render_template('homepage.html')
 
+# Route for user logout
+@app.route('/logout')
+def user_logout():
+    session.clear()
+    flash('Logout Complete')
+    return redirect('/')
 
 # Route for user to register for account
 @app.route('/register', methods=['POST', 'GET'])
@@ -94,7 +100,6 @@ def view_profile():
 
     else:
         flash('Error viewing prescriptions!')
-
     return render_template('profile.html', user=existing_user, prescriptions=user_prescriptions)
 
 
@@ -102,61 +107,57 @@ def view_profile():
 @app.route('/profile', methods =['POST'])
 def add_prescription():
 
-        # Get data and extract brand name, generic name, and unii
-        med_result_data = request.json
-        brand_name = med_result_data.get('brandName')
-        generic_name = med_result_data.get('genericName')
-        strength = med_result_data.get('strength')
-        dosage_form = med_result_data.get('dosageForm')
-        unii = med_result_data.get('unii')
+    # Get data and extract brand name, generic name, and unii
+    med_result_data = request.json
+    brand_name = med_result_data.get('brandName')
+    generic_name = med_result_data.get('genericName')
+    strength = med_result_data.get('strength')
+    dosage_form = med_result_data.get('dosageForm')
+    unii = med_result_data.get('unii')
 
-        # Check if user in session
-        user_id = session.get('user_id')
-        # If user logged in, get user from the database
-        if user_id:
-            user = crud.get_user_by_id(user_id)
+    # Check if user in session
+    user_id = session.get('user_id')
+    # If user logged in, get user from the database
+    if user_id:
+        user = crud.get_user_by_id(user_id)
 
-            # Add a new prescription which is linked to medication and user
-            prescription = crud.create_prescription(user_id, brand_name, generic_name, strength, dosage_form, unii)
-            user.prescriptions.append(prescription)
-            db.session.add(user)
-            db.session.commit()
+        # Add a new prescription which is linked to medication and user
+        prescription = crud.create_prescription(user_id, brand_name, generic_name, strength, dosage_form, unii)
+        user.prescriptions.append(prescription)
+        db.session.add(user)
+        db.session.commit()
 
-            # Return JSON response confirming prescription added
-            return jsonify({'brandName': brand_name, 'message':'New prescription added successfully'})
-
-        # If user not logged in:
-        return jsonify({'Error':'Please login'})
+        # Return JSON response confirming prescription added
+        return jsonify({'brandName': brand_name, 'message':'New prescription added successfully'})
+    # If user not logged in:
+    return jsonify({'Error':'Please login'})
 
 
 # Delete a prescription
-# @app.route('/profile', methods='POST')
-# def delete_prescription():
+@app.route('/profile/delete_prescription', methods=['POST'])
+def delete_prescription():
 
-#     # Get data and extract brand name, generic name, and unii
-#         med_result_data = request.json
-#         brand_name = med_result_data.get('brandName')
-#         generic_name = med_result_data.get('genericName')
-#         unii = med_result_data.get('unii')
+    med_result_data = request.json
+    prescription_id = med_result_data.get('prescriptionId')
 
-#         # Check if user in session
-#         user_id = session.get('user_id')
-#         # If user, get user details from database
-#         if user_id:
-#             user = crud.get_user_by_id(user_id)
+    # Check if user in session
+    user_id = session.get('user_id')
+    # If user, get user details from database
+    if user_id:
+        user = crud.get_user_by_id(user_id)
 
-#             # Delete prescription from database
-#             prescription = crud.delete_prescription(user_id, brand_name, generic_name, unii)
+        # Delete prescription from database
+        prescription = crud.get_prescription_by_id(prescription_id)
+        if prescription:
+            db.session.delete(prescription)
+            db.session.commit()
 
-#             if prescription:
-#                 db.session.delete(prescription)
-#                 db.session.commit()
+            return jsonify({'message':'Prescription has been deleted.'})
 
-#                 return jsonify({'message':'Prescription deleted'})
-#             else:
-#                 return jsonify({'error':'Unable to find that prescription'})
+        else:
+            return jsonify({'Error': 'Prescription not found.'})
 
-#         return jsonify({'Error':'Please login'})
+    return jsonify({'Error':'Please login'})
 
 
 if __name__ == "__main__":

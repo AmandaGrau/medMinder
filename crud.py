@@ -37,21 +37,40 @@ def get_user_by_email(email):
     return User.query.filter_by(email=email).first()
 
 # Function to create a new prescription
-def create_prescription(user_id, brand_name, generic_name, unii, dosage_form, strength):
+def create_prescription(user_id, brand_name, generic_name, strength, dosage_form, unii):
     """Create and return a new prescription"""
 
     prescription = Prescription(
         user_id=user_id,
         brand_name=brand_name,
         generic_name=generic_name,
-        unii=unii,
+        strength=strength,
         dosage_form=dosage_form,
-        strength=strength)
+        unii=unii)
 
     db.session.add(prescription)
     db.session.commit()
 
     return prescription
+
+# Function to delete a prescription
+def delete_prescription(user_id, brand_name, generic_name, strength, dosage_form, unii):
+    """Delete a prescription"""
+
+    prescription = Prescription(
+        user_id=user_id,
+        brand_name=brand_name,
+        generic_name=generic_name,
+        strength=strength,
+        dosage_form=dosage_form,
+        unii=unii)
+
+    db.session.delete(prescription)
+    db.session.commit()
+
+    return
+
+
 
 # Function to get prescription by id
 def get_prescription_by_id(prescription_id):
@@ -94,7 +113,6 @@ def get_prescription_by_strength(strength):
     """Return prescription by form."""
 
     return Prescription.query.filter_by(strength)
-
 
 if __name__ == "__main__":
     from server import app

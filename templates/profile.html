@@ -2,21 +2,21 @@
 {% block title %}Profile{% endblock %}
 {% block body %}
 
-  <!-- Welcome the user -->
-  <h1>Prescriptions Details</h1>
-  <!-- display the user's email -->
-  <p>Email: {{ user.email }}</p>
-  <br>
 
+<a href="/logout">Logout</a>
+<p>Currently logged in: {{ user.email }}</p>
+
+<br>
+  <br>
 <h2>Your Presciptions</h2>
 <table>
   <thead>
     <tr>
       <th>Brand Name</th>
       <th>Generic Name</th>
-      <th>Unii</th>
-      <th>Dosage Form</th>
       <th>Strength</th>
+      <th>Dosage Form</th>
+      <th>Unii</th>
     </tr>
   </thead>
   <tbody id="prescriptions_table">
@@ -27,23 +27,26 @@
       <td>{{ prescription.strength }}</td>
       <td>{{ prescription.dosage_form }}</td>
       <td>{{ prescription.unii }}</td>
-      <td><button type="submit" id="{{ prescription.unii }}" 
-        class="edit-btn">Edit</button></td>
-      <td><button type="submit" id="{{ prescription.unii }}" class="delete-btn">Delete</button></td>
+      <td><button type="button" value="{{ prescription.prescription_id }}" class="edit-btn">Edit</button></td>
+      <td><button type="button" value="{{ prescription.prescription_id }}" class="delete-btn">Delete</button></td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+<br>
 
 
-<form id="med_search">
-  <input type="text" id="search_query" name="search_query"
-  placeholder="Enter a medication name">
-  <button type="submit" id="med_search_submit">Search</button>
-</form>
+<br>
+<br>
+    <form id="med_search">
+      <input type="text" id="search_query" name="search_query"
+      placeholder="Enter a medication name">
+      <button type="submit" id="med_search_submit">Search</button>
+    </form>
+<br>
+
 
 <div id="med_search_results"></div>
-
 <h2>Search Results</h2>
   <table>
     <thead>
@@ -55,13 +58,9 @@
       <th>Unii</th>
     </tr>
     </thead>
-    <!-- Search results -->
     <tbody id="results_table">
       </tbody>
   </table>
   <script src="/static/med_search.js"></script>
 {% endblock %}
-
-<!-- User logout -->
-<a href="/logout">Logout</a>
 
