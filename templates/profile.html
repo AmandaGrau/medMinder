@@ -2,7 +2,6 @@
 {% block title %}Profile{% endblock %}
 {% block body %}
 
-
 <a href="/logout">Logout</a>
 <p>Currently logged in: {{ user.email }}</p>
 
@@ -15,26 +14,36 @@
       <th>Brand Name</th>
       <th>Generic Name</th>
       <th>Strength</th>
-      <th>Dosage Form</th>
-      <th>Unii</th>
     </tr>
   </thead>
+  
   <tbody id="prescriptions_table">
+    <col width="175">
+    <col width="950"
+    <col width="100">
+
     {% for prescription in prescriptions %}
     <tr>
       <td>{{ prescription.brand_name }}</td>
       <td>{{ prescription.generic_name }}</td>
       <td>{{ prescription.strength }}</td>
-      <td>{{ prescription.dosage_form }}</td>
-      <td>{{ prescription.unii }}</td>
-      <td><button type="button" value="{{ prescription.prescription_id }}" class="edit-btn">Edit</button></td>
-      <td><button type="button" value="{{ prescription.prescription_id }}" class="delete-btn">Delete</button></td>
+          <div class="frequency-number">
+            <td><button type="button" value="{{ prescription.prescription_id }}" class="number-dropdown">Select Frequency</button></td>
+            <div class="schedule-dropdown">
+              <a href="#">1x</a>
+              <a href="#">2x</a>
+              <a href="#">3x</a>
+            </div>
+          </div>
+
+          <td><button type="button" value="{{ prescription.prescription_id }}" class="edit-btn">Edit</button></td>
+          <td><button type="button" value="{{ prescription.prescription_id }}" class="delete-btn">Delete</button></td>
     </tr>
     {% endfor %}
+          
   </tbody>
 </table>
 <br>
-
 
 <br>
 <br>
@@ -45,18 +54,15 @@
     </form>
 <br>
 
-
 <div id="med_search_results"></div>
 <h2>Search Results</h2>
   <table>
     <thead>
-    <tr>
-      <th>Brand Name</th>
-      <th>Generic Name</th>
-      <th>Strength</th>
-      <th>Dosage Form</th>
-      <th>Unii</th>
-    </tr>
+          <tr>
+            <col width="175">
+            <col width="950"
+            <col width="100">
+          </tr>
     </thead>
     <tbody id="results_table">
       </tbody>

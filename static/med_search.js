@@ -6,16 +6,16 @@ function add_med(btn) {
     const brandName = btn.value;
     const genericName = btn.dataset.genericName;
     const strength = btn.dataset.strength
-    const dosageForm = btn.dataset.dosageForm;
-    const unii = btn.dataset.unii;
+    // const dosageForm = btn.dataset.dosageForm;
+    // const unii = btn.dataset.unii;
 
     // Data to send with POST request
     const med_result_data = {
         brandName: brandName,
         genericName: genericName,
         strength: strength,
-        dosageForm: dosageForm,
-        unii: unii
+        // dosageForm: dosageForm,
+        // unii: unii
     };
     // POST request to fetch medication
     fetch('/profile', {
@@ -39,7 +39,7 @@ function add_med(btn) {
         const select_med_row = btn.closest('tr');
 
         // Create new row to add prescription
-        const new_prescription_row = `<tr><td>${brandName}</td><td>${genericName}</td><td>${strength}</td><td>${dosageForm}</td><td>${unii}</td></tr>`;
+        const new_prescription_row = `<tr><td>${brandName}</td><td>${genericName}</td><td>${strength}</td></tr>`;
 
         // Add new prescription row to prescriptions section
         const prescriptions_table = document.querySelector("#prescriptions_table");
@@ -68,6 +68,12 @@ document.querySelector('#med_search').addEventListener('submit',(evt) =>{
         if(results.results && results.results.length > 0) {
             results.results.forEach(result => {
                 result.products.forEach(product => {
+
+
+                    // Console log to debug dosage_form field value issue
+                    console.log(product);
+
+
                     const brand_name = product.brand_name;
                     const generic_name = product.active_ingredients.map(ing => ing.name).join(',');
 
@@ -87,16 +93,14 @@ document.querySelector('#med_search').addEventListener('submit',(evt) =>{
                         return '';
                     }).filter(s => s).join(',');
 
-                    const dosage_form = product.dosage_form;
-                    const unii = results.openfda && result.openfda.unii ? result.openfda.unii.join(','): 'N/A';
+                    // const dosage_form = product.dosage_form;
+                    // const unii = results.openfda && result.openfda.unii ? result.openfda.unii.join(','): 'N/A';
 
                     const drug_results = `<tr>
                                             <td>${brand_name}</td>
                                             <td>${generic_name}</td>
                                             <td>${strength}</td>
-                                            <td>${dosage_form}</td>
-                                            <td>${unii}</td>
-                                            <td><button onclick="add_med(this)" value="${brand_name}" data-generic-name="${generic_name}" data-strength="${strength}" data-dosage_form="${dosage_form}" data-unii="${unii}">Add to Prescriptions</button></td>
+                                            <td><button onclick="add_med(this)" value="${brand_name}" data-generic-name="${generic_name}" data-strength="${strength}">Add to Prescriptions</button></td>
                                         </tr>`
                     results_table.insertAdjacentHTML("beforeend", drug_results);
                     });
@@ -113,7 +117,6 @@ document.querySelector('#med_search').addEventListener('submit',(evt) =>{
 
 // Delete a prescription
 function deletePrescription(btn) {
-    console.log(btn.value);
 
     // Get medication for button value
     const prescriptionId = btn.value;

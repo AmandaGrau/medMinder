@@ -15,6 +15,18 @@ tbody tr:nth-child(odd) {
     background-color: rgb(208, 223, 232);
 }
 
+/* Frequency menu dropdown */
+.dropdown-options {
+    display: none;
+    position: absolute;
+    overflow:auto;
+}
+.dropown:hover .dropdown-options {
+    display: block;
+}
+
+
+
 /* Login container box with input boxes and login button */
 /* .wrapper {
     max-width 330px;

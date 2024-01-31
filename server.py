@@ -112,8 +112,8 @@ def add_prescription():
     brand_name = med_result_data.get('brandName')
     generic_name = med_result_data.get('genericName')
     strength = med_result_data.get('strength')
-    dosage_form = med_result_data.get('dosageForm')
-    unii = med_result_data.get('unii')
+    # dosage_form = med_result_data.get('dosageForm')
+    # unii = med_result_data.get('unii')
 
     # Check if user in session
     user_id = session.get('user_id')
@@ -122,7 +122,7 @@ def add_prescription():
         user = crud.get_user_by_id(user_id)
 
         # Add a new prescription which is linked to medication and user
-        prescription = crud.create_prescription(user_id, brand_name, generic_name, strength, dosage_form, unii)
+        prescription = crud.create_prescription(user_id, brand_name, generic_name, strength)
         user.prescriptions.append(prescription)
         db.session.add(user)
         db.session.commit()
