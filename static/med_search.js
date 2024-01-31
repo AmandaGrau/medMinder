@@ -7,8 +7,7 @@ function add_med(btn) {
     const genericName = btn.dataset.genericName;
     const strength = btn.dataset.strength
     const dosageForm = btn.dataset.dosageForm;
-    const unii = btn.dataset.unii
-    ;
+    const unii = btn.dataset.unii;
 
     // Data to send with POST request
     const med_result_data = {
@@ -25,7 +24,6 @@ function add_med(btn) {
         headers: {
             'Content-Type': 'application/json',
         },
-        
     })
     .then((response) => {
         if (response.ok){
@@ -67,34 +65,42 @@ document.querySelector('#med_search').addEventListener('submit',(evt) =>{
         const results_table = document.querySelector('#results_table')
         results_table.innerHTML = ""
 
-        // if(results.results && results.results.length > 0) {
-        //     for (let i in results.results[0].openfda.brand_name) {
-        //         const brand_name = results.results[0].openfda.brand_name[i];
-        //         const generic_name = results.results[0].openfda.generic_name[i];
-        //         const unii = results.results[0].openfda.unii[i];
-        //         const drug_results =
-      
-
-
         if(results.results && results.results.length > 0) {
             results.results.forEach(result => {
                 result.products.forEach(product => {
                     const brand_name = product.brand_name;
                     const generic_name = product.active_ingredients.map(ing => ing.name).join(',');
-                    const strength = product.active_ingredients.map(ing => ing.strength).join(',');
+
+                    // Handle duplicate results being returned for strength field
+                    const setStrengths = new Set();
+                    const strength = product.active_ingredients.map(ing => {
+                        // Trim extra content being returned at the end of strength field results
+                        let uniqueStrength = ing.strength.replace(/\*\*.*$/,'').trim();
+
+                        // Check for duplicate strength values
+                        if (!setStrengths.has(uniqueStrength)) {
+                            setStrengths.add(uniqueStrength);
+                            return uniqueStrength;
+                        }
+
+                        // If duplicate values exist, filter dups and and remove empty strings
+                        return '';
+                    }).filter(s => s).join(',');
+
                     const dosage_form = product.dosage_form;
                     const unii = results.openfda && result.openfda.unii ? result.openfda.unii.join(','): 'N/A';
+
                     const drug_results = `<tr>
                                             <td>${brand_name}</td>
                                             <td>${generic_name}</td>
                                             <td>${strength}</td>
-                                            <td>${dosage_form}</td>+
+                                            <td>${dosage_form}</td>
                                             <td>${unii}</td>
                                             <td><button onclick="add_med(this)" value="${brand_name}" data-generic-name="${generic_name}" data-strength="${strength}" data-dosage_form="${dosage_form}" data-unii="${unii}">Add to Prescriptions</button></td>
                                         </tr>`
                     results_table.insertAdjacentHTML("beforeend", drug_results);
                     });
-            });
+            })
         } else {
             results_table.innerHTML = "<tr><td> colspan='6'>No medication matches found!</td></tr>";
         }
@@ -122,14 +128,12 @@ function deletePrescription(btn) {
             prescriptionId: prescriptionId,
         }),
     })
-
         // If response == 200, delete row with prescription
         .then((response) => {
             if (response.ok) {
                 
                 // const prescriptionRow = btn.closest('tr');
                 prescriptionRow.remove();
-                // const get_prescription_row = `<tr><td>${brandName}</td><td>${genericName}</td><td>${strength}</td><td>${dosageForm}</td><td>${unii}</td></tr>`;
 
             } else {
                 throw Error('An error has occurred in deleting your prescription.');
@@ -143,5 +147,6 @@ function deletePrescription(btn) {
             console.error('Error:', error);
         })
     }
-document.querySelectorAll('.delete-btn').forEach((deleteBtn) => deleteBtn.addEventListener('click',() => deletePrescription(deleteBtn))
-)
+document.querySelectorAll('.delete-btn').forEach((deleteBtn) => {
+    deleteBtn.addEventListener('click',() => deletePrescription(deleteBtn));
+});
