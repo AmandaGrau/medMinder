@@ -45,9 +45,10 @@ class Prescription(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     brand_name = db.Column(db.String)
     generic_name = db.Column(db.String)
-    # unii = db.Column(db.String)
-    # dosage_form = db.Column(db.String)
     strength = db.Column(db.String)
+    frequency_number = db.Column(db.String, nullable=False)
+    frequency_schedule = db.Column(db.String, nullable=False)
+
 
     user = db.relationship("User", back_populates="prescriptions")
     medication = db.relationship("Medication", back_populates="prescriptions")
@@ -55,7 +56,7 @@ class Prescription(db.Model):
     def __repr__(self):
         """Show prescribed dosge, frequency taken, and refill due date."""
 
-        return f"<Brand:{self.brand_name} Generic:{self.generic_name} Strength:{self.strength}>"
+        return f"<Brand:{self.brand_name} Generic:{self.generic_name} Strength:{self.strength}Frequency:{self.frequency_number} Frequency Dropdown:{self.frequency_schedule}>"
 
 
 # Medications queried from Open FDA

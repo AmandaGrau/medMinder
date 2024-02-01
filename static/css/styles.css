@@ -6,7 +6,6 @@
     box-sizing: border-box;
     font-family: "Roboto";
 }
-
 body {
     background: #333 url('/static/img/shutterstock_2257487683.jpg');
     background-size: cover;

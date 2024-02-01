@@ -28,16 +28,22 @@
       <td>{{ prescription.generic_name }}</td>
       <td>{{ prescription.strength }}</td>
           <div class="frequency-number">
-            <td><button type="button" value="{{ prescription.prescription_id }}" class="number-dropdown">Select Frequency</button></td>
-            <div class="schedule-dropdown">
+            <td><button value="{{ prescription.prescription_id }}" class="number-dropdown">Select Frequency</button></td>
               <a href="#">1x</a>
               <a href="#">2x</a>
               <a href="#">3x</a>
             </div>
           </div>
-
+          <div class="frequency-taken">
+            <td><button value="{{ prescription.prescription_id }}" class="taken-dropdown">Select Schedule</button></td>
+              <a href="#">day</a>
+              <a href="#">week</a>
+              <a href="#">month</a>
+            </div>
+          </div>
           <td><button type="button" value="{{ prescription.prescription_id }}" class="edit-btn">Edit</button></td>
           <td><button type="button" value="{{ prescription.prescription_id }}" class="delete-btn">Delete</button></td>
+          <td><button type="button" value="{{ prescription.prescription_id }}" class="save-btn">Save</button></td>
     </tr>
     {% endfor %}
           

@@ -159,6 +159,32 @@ def delete_prescription():
 
     return jsonify({'Error':'Please login'})
 
+# Save changes made to prescriptions in dropdown menus
+@app.route('/profile/save_changes', methods=['POST'])
+def save_prescription_changes():
+
+    med_result_data = request.json
+    prescription_id = med_result_data.get('prescriptionId')
+
+    # Check if user in session
+    user_id = session.get('user_id')
+    # If user, get user details from database
+    if user_id:
+        user = crud.get_user_by_id(user_id)
+
+        # Delete prescription from database
+        prescription = crud.get_prescription_by_id(prescription_id)
+        if prescription:
+            db.session.add(prescription)
+            db.session.commit()
+
+            return jsonify({'message':'Updates saved successfully!'})
+
+        else:
+            return jsonify({'Error': 'Prescription not found.'})
+
+    return jsonify({'Error':'Please login'})
+
 
 if __name__ == "__main__":
     connect_to_db(app)
