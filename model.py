@@ -27,14 +27,14 @@ class User(db.Model):
     password = db.Column(db.String(100), nullable=False)
 
     prescriptions = db.relationship("Prescription", back_populates="user")
+    refill_event= db.relationship("Refill_Event", back_populates="user")
 
     def __repr__(self):
-        """Show user info."""
-
+        """Show user details."""
         return f"<First:{self.fname} Last:{self.lname} Email:{self.email} Password:{self.password}>"
 
 
-# Table for user's prescribed medications
+# User's prescribed medications
 class Prescription(db.Model):
     """The user's prescribed medication."""
 
@@ -46,17 +46,14 @@ class Prescription(db.Model):
     brand_name = db.Column(db.String)
     generic_name = db.Column(db.String)
     strength = db.Column(db.String)
-    frequency_number = db.Column(db.String, nullable=False)
-    frequency_schedule = db.Column(db.String, nullable=False)
-
 
     user = db.relationship("User", back_populates="prescriptions")
     medication = db.relationship("Medication", back_populates="prescriptions")
+    refill_event= db.relationship("RefillEvent", back_populates="prescriptions")
 
     def __repr__(self):
         """Show prescribed dosge, frequency taken, and refill due date."""
-
-        return f"<Brand:{self.brand_name} Generic:{self.generic_name} Strength:{self.strength}Frequency:{self.frequency_number} Frequency Dropdown:{self.frequency_schedule}>"
+        return f"<Brand:{self.brand_name} Generic:{self.generic_name} Strength:{self.strength}>"
 
 
 # Medications queried from Open FDA
@@ -68,16 +65,47 @@ class Medication(db.Model):
     medication_id = db.Column(db.Integer, primary_key=True)
     brand_name = db.Column(db.String)
     generic_name = db.Column(db.String)
-    # unii = db.Column(db.String)
-    # dosage_form = db.Column(db.String)
     strength = db.Column(db.String)
 
     prescriptions = db.relationship("Prescription", back_populates="medication")
 
     def __repr__(self):
-        """Formal and generic medication names."""
-
+        """Medication names and strengths."""
         return f"<Brand:{self.brand_name}, Generic:{self.generic_name} Strength:{self.strength}>"
+
+# A calendar for prescription refill dates and reminders
+class RefillEvent(db.Model):
+    """Prescription refill events and reminders"""
+
+    __tablename__ = "refill_events"
+
+    event_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    prescription = db.Column(db.Integer, db.ForeignKey("prescriptions.prescription_id"))
+    event_title = db.Column(db.String(255), nullable=False)
+    event_start = db.Column(db.Datetime, nullable=False)
+    event_end = db.Column(db.Datetime, nullable=False)
+    event_url = db.Column(db.String(255))
+    # Daily, Weekly, Monthly, Yearly, Custom
+    recurrence_pattern = db.Column(db.String(20))
+    # Custom pattern input (every _ days, etc.)
+    recurrence_interval = db.Column(db.Integer)
+    # Weekly reccurence on a given day
+    recurrence_days_of_week = db.Column(db.String(7))
+    # For monthly recurrence on a given day
+    recurrence_day_of_month = db.Column(db.Integer)
+    # For monthly recurrence on given week and day
+    recurrence_week_and_day = db.Column(db.String(20))
+    # End date for recurring events
+    end_date_for_recurrence = db.Column(db.DateTime)
+
+
+    user = db.relationship("User", back_populates="refill_events")
+    prescriptions = db.relationship("Prescription", back_populates="refill_events")
+
+    def __repr__(self):
+        """Show refill event details"""
+        return f"<Event:{self.event_title}, Start:{self.event_start} End:{self.event_end}>"
 
 
 if __name__ == "__main__":

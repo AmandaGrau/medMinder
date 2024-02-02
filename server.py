@@ -1,6 +1,6 @@
 """View site."""
 from flask import Flask, session, render_template, url_for, request, flash, redirect, jsonify
-# Import SQLAlchemy constructor functionn
+from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from model import connect_to_db, db
 import crud
@@ -159,36 +159,66 @@ def delete_prescription():
 
     return jsonify({'Error':'Please login'})
 
-# Save changes made to prescriptions in dropdown menus
-@app.route('/profile/save_changes', methods=['POST'])
-def save_prescription_changes():
+# # Save changes made to prescriptions in dropdown menus
+# @app.route('/profile/save_changes', methods=['POST'])
+# def save_prescription_changes():
 
-    med_result_data = request.json
-    prescription_id = med_result_data.get('prescriptionId')
+#     med_result_data = request.json
+#     prescription_id = med_result_data.get('prescriptionId')
 
-    # Check if user in session
-    user_id = session.get('user_id')
-    # If user, get user details from database
-    if user_id:
-        user = crud.get_user_by_id(user_id)
+#     # Check if user in session
+#     user_id = session.get('user_id')
+#     # If user, get user details from database
+#     if user_id:
+#         user = crud.get_user_by_id(user_id)
 
-        # Delete prescription from database
-        prescription = crud.get_prescription_by_id(prescription_id)
-        if prescription:
-            db.session.add(prescription)
-            db.session.commit()
+#         # Delete prescription from database
+#         prescription = crud.get_prescription_by_id(prescription_id)
+#         if prescription:
+#             db.session.add(prescription)
+#             db.session.commit()
 
-            return jsonify({'message':'Updates saved successfully!'})
+#             return jsonify({'message':'Updates saved successfully!'})
 
-        else:
-            return jsonify({'Error': 'Prescription not found.'})
+#         else:
+#             return jsonify({'Error': 'Prescription not found.'})
 
-    return jsonify({'Error':'Please login'})
+#     return jsonify({'Error':'Please login'})
 
+events = [
+    {
+        'refill': 'Refill test1',
+        'date': '2024-02-14',
+    },
+    {
+        'refill': 'Refill test2',
+        'date': '2024-02-17',
+    },
+    {
+        'refill': 'Refill test3',
+        'date': '2024-02-17',
+    }
+]
+
+@app.route('/calendar')
+def calendar():
+
+    return render_template('calendar.html')
+
+# List to store user input refill dates and reminders
+refill_dates = []
+
+@app.route('/add_refill', methods=["POST"])
+def add_refill():
+    """Create refill event fromn user input"""
+
+    refill_date = request.form.get('refill_date')
+
+    return render_template('add_event.html', events=events)
 
 if __name__ == "__main__":
     connect_to_db(app)
-    app.run(debug=True)
+    app.run(debug=True, port=5000)
 
 
 

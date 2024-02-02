@@ -1,4 +1,3 @@
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ADD TO PRESCRIPTIONS BUTTON <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 // Add a medication to user prescriptions
 function add_med(btn) {
     console.log(btn.value);
@@ -200,65 +199,68 @@ document.querySelectorAll('.edit-btn').forEach((editBtn) => {
     editBtn.addEventListener('click',() => editPrescription(editBtn));
 });
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SAVE CHANGES TO PRESCRIPTION <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SAVE CHANGES TO PRESCRIPTION <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 // Save prescription updates
-function savePrescriptionUpdate(btn) {
+// function savePrescriptionUpdate(btn) {
 
-    const prescriptionId = btn.value;
-    const prescriptionRow = btn.closest('tr');
+//     const prescriptionId = btn.value;
+//     const prescriptionRow = btn.closest('tr');
 
-    fetch('/profile/save_prescription_update', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            prescriptionId: prescriptionId,
-        }),
-    })
-        .then((response) => {
-            if (response.ok) {
-                // ====================================================================================================================================================
-                const prescriptionRow = btn.closest('tr');
-                prescriptionRow.update();
+//     fetch('/profile/save_prescription_update', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//             prescriptionId: prescriptionId,
+//         }),
+//     })
+//         .then((response) => {
+//             if (response.ok) {
+                // =============================================================================================================================================
+    //             const prescriptionRow = btn.closest('tr');
+    //             prescriptionRow.update();
 
-            } else {
-                throw Error('An error occurred in updating your prescription.');
-            }
-            return response.json();
-        })
-        .then((results) => {
-            console.log(results);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        })
-    }
+    //         } else {
+    //             throw Error('An error occurred in updating your prescription.');
+    //         }
+    //         return response.json();
+    //     })
+    //     .then((results) => {
+    //         console.log(results);
+    //     })
+    //     .catch(error => {
+    //         console.error('Error:', error);
+    //     })
+    // }
 // Save button event listener
-document.querySelectorAll('.save-btn').forEach((saveBtn) => {
-    saveBtn.addEventListener('click',() => savePrescriptionUpdate(saveBtn));
+// document.querySelectorAll('.save-btn').forEach((saveBtn) => {
+//     saveBtn.addEventListener('click',() => savePrescriptionUpdate(saveBtn));
 
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> DROPDOWNS FOR PRESCRIPTION FREQUENCY <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> FREQUENCY DROPDOWNS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// document.querySelectorAll("#prescriptions_table")
+//     prescriptionRows.forEach(row => {
+//         row.addEventListener("mouseenter", () => {
+//             row.style.backgroundColor = "rgb(236, 235, 235)";
+//         });
+//         row.addEventListener("mouseleave", () => {
+//             row.style.backgroundColor = "";
+//         });
 
-// Event listener for dropdown hover on row
-const prescriptionRows = document.querySelectorAll("#prescriptions_table")
-    prescriptionRows.forEach(row => {
-        row.addEventListener("mouseenter", () => {
-            row.style.backgroundColor = "rgb(236, 235, 235)";
-        });
-        row.addEventListener("mouseleave", () => {
-            row.style.backgroundColor = "";
-        });
+// Frequency Number dropdown event listener
+// const numberDropdowns = document.querySelectorAll(".number-dropdown");
+//     numberDropdowns.forEach(btn => {
+//         btn.addEventListener("click", (event) => {
+//         const prescriptionId = event.target.value;
+//         });
 
-// Event listener for number and taken dropdowns
-const numberDropdowns = document.querySelectorAll(".number-dropdown");
-    numberDropdowns.forEach(btn => {
-        btn.addEventListener("click", (event) => {
-        const prescriptionId = event.target.value;
-        });
-        const takenDropdowns = document.querySelectorAll(".taken-dropdown");
-        takenDropdowns.forEach(btn => {
-            btn.addEventListener("click", (event) => {
-                const prescriptionID = event. target.value;
-        });
+//         const takenDropdowns = document.querySelectorAll(".taken-dropdown");
+//         takenDropdowns.forEach(btn => {
+//             btn.addEventListener("click", (event) => {
+//             const prescriptionId = event.target.value;
+//         });
+//     })
+// })
+//     })
+// })
