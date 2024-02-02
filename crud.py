@@ -99,7 +99,9 @@ def get_prescription_by_strength(strength):
 
 
 # Functions to handle calendar and events
+def get_events_by_user_id():
 
+   return RefillEvent.query.filter_by()
 
 if __name__ == "__main__":
     from server import app

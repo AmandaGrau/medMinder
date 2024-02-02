@@ -175,11 +175,13 @@ def calendar():
 def calendar_event():
     """Process calendar event from user input"""
 
-    user_id = session.get('user_id')
+    # Get user from session
+    user_id = session['user_id']
     # If user, get user details from database
     if user_id:
         user = crud.get_user_by_id(user_id)
 
+    # Get user event input from the form submission
     event_title = request.form.get('event_title')
     event_start = request.form.get('event_start')
     event_end = request.form.get('event_end')
@@ -199,15 +201,67 @@ def calendar_event():
 
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Create Refill Event Object <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-# Create refill object and add to the database
-    new_refill_event = RefillEvent()
+    # Create refill object and add to the database
+    new_event = RefillEvent(
+        user_id=user_id,
+        event_title=event_title,
+        event_start=event_start,
+        event_end=event_end,
+        event_url=event_url,
+        # Daily, Weekly, Monthly, Yearly, Custom
+        recurrence_pattern=recurrence_pattern,
+        # Custom pattern input (every _ days, etc.)
+        recurrence_interval=recurrence_interval,
+        # Weekly reccurence on a given day
+        recurrence_days_of_week=recurrence_days_of_week,
+        # For monthly recurrence on a given day
+        recurrence_day_of_month=recurrence_day_of_month,
+        # For monthly recurrence on given week and day
+        recurrence_week_and_day=recurrence_week_and_day,
+        # End date for recurring events
+        end_date_for_recurrence=end_date_for_recurrence
+    )
 
+    db.session.add(new_event)
+    db.session.commit()
 
+    return jsonify({'message': 'Refill added successfully!'})
 
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Get event from database <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    
+@app.route('/get_events', methods=['GET'])
+def get_events():
 
+    # Get user from session
+    user_id=session['user_id']
+    # Get events by user id
+    events = RefillEvent.query.filter_by(user_id=user_id)
+    
+    # Convert events to list of dict for JSON
+    event_list = []
+
+    # Loop over events and append to events list
+    for event in events:
+        event_data = {
+            'event_title': event.event_title,
+            'event_start': event.event_start.strftime('%Y-%m-%dT%H:%M:%S'),
+            'event_end': event.event_end.strftime('%Y-%m-%dT%H:%M:%S'),
+            'event_url': event.event_url,
+            # Daily, Weekly, Monthly, Yearly, Custom
+            'recurrence_pattern': event.recurrence_pattern,
+            # Custom pattern input (every _ days, etc.)
+            'recurrence_interval': event.recurrence_interval,
+            # Weekly reccurence on a given day
+            'recurrence_days_of_week': event.recurrence_days_of_week,
+            # For monthly recurrence on a given day
+            'recurrence_day_of_month': event.recurrence_day_of_month,
+            # For monthly recurrence on given week and day
+            'recurrence_week_and_day': event.recurrence_week_and_day,
+            # End date for recurring events
+            'end_date_for_recurrence': event.end_date_for_recurrence
+        }
+        event_list.append(event_data)
+        return jsonify({'events':event_list})
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Update Event <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
