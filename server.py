@@ -159,6 +159,70 @@ def delete_prescription():
 
     return jsonify({'Error':'Please login'})
 
+
+
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Calendar View <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+# Route to view calendar
+@app.route('/calendar')
+def calendar():
+
+    return render_template('calendar.html')
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Handle events from form <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+# Route to handle calendar events
+@app.route('/cal_event', methods=["POST"])
+def calendar_event():
+    """Process calendar event from user input"""
+
+    user_id = session.get('user_id')
+    # If user, get user details from database
+    if user_id:
+        user = crud.get_user_by_id(user_id)
+
+    event_title = request.form.get('event_title')
+    event_start = request.form.get('event_start')
+    event_end = request.form.get('event_end')
+    event_url = request.form.get('event_url')
+    # Daily, Weekly, Monthly, Yearly, Custom
+    recurrence_pattern = request.form.get('recurrence_pattern')
+    # Custom pattern input (every _ days, etc.)
+    recurrence_interval = request.form.get('recurrence_interval')
+    # Weekly reccurence on a given day
+    recurrence_days_of_week = request.form.get('recurrence_days_of_week')
+    # For monthly recurrence on a given day
+    recurrence_day_of_month = request.form.get('recurrence_day_of_month')
+    # For monthly recurrence on given week and day
+    recurrence_week_and_day = request.form.get('recurrence_week_and_day')
+    # End date for recurring events
+    end_date_for_recurrence = request.form.get('end_date_for_recurrence')
+
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Create Refill Event Object <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+# Create refill object and add to the database
+    new_refill_event = RefillEvent()
+
+
+
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Get event from database <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    
+
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Update Event <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Delete Event <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+# return render_template('cal_event.html', events=events)
+
+if __name__ == "__main__":
+    connect_to_db(app)
+    app.run(debug=True, port=5000)
+
+
 # # Save changes made to prescriptions in dropdown menus
 # @app.route('/profile/save_changes', methods=['POST'])
 # def save_prescription_changes():
@@ -184,41 +248,6 @@ def delete_prescription():
 #             return jsonify({'Error': 'Prescription not found.'})
 
 #     return jsonify({'Error':'Please login'})
-
-events = [
-    {
-        'refill': 'Refill test1',
-        'date': '2024-02-14',
-    },
-    {
-        'refill': 'Refill test2',
-        'date': '2024-02-17',
-    },
-    {
-        'refill': 'Refill test3',
-        'date': '2024-02-17',
-    }
-]
-
-@app.route('/calendar')
-def calendar():
-
-    return render_template('calendar.html')
-
-# List to store user input refill dates and reminders
-refill_dates = []
-
-@app.route('/add_refill', methods=["POST"])
-def add_refill():
-    """Create refill event fromn user input"""
-
-    refill_date = request.form.get('refill_date')
-
-    return render_template('add_event.html', events=events)
-
-if __name__ == "__main__":
-    connect_to_db(app)
-    app.run(debug=True, port=5000)
 
 
 

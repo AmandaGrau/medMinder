@@ -1,6 +1,7 @@
 """CRUD Operations"""
 from model import db, User, Prescription, Medication, connect_to_db
 
+# Add a new registered user to the database
 def add_new_user(fname, lname, email, password):
     """Add new user to database."""
 
@@ -10,7 +11,7 @@ def add_new_user(fname, lname, email, password):
 
     return user
 
-# Function to create a new user with email and password
+# Register a new user with email and password
 def register_user(fname, lname, email, password):
     """Create and return a new user."""
 
@@ -96,8 +97,10 @@ def get_prescription_by_strength(strength):
 
     return Prescription.query.filter_by(strength=strength).first()
 
+
+# Functions to handle calendar and events
+
+
 if __name__ == "__main__":
     from server import app
     connect_to_db(app)
-
-
