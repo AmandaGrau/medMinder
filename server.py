@@ -234,6 +234,7 @@ def get_events():
 
     # Get user from session
     user_id=session['user_id']
+
     # Get events by user id
     events = RefillEvent.query.filter_by(user_id=user_id)
     
@@ -264,8 +265,38 @@ def get_events():
         return jsonify({'events':event_list})
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Update Event <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+@app.route('/edit_event/<int:event_id>', methods=['POST'])
+def edit_event(event_id):
 
+    # Get user from session
+    user_id = session['user_id']
+    # If user, get user details from database
+    if user_id:
+        user = crud.get_user_by_id(user_id)
 
+    event = RefillEvent.query.get(event_id)
+
+    # Update event properties from form submission
+    event.event_title = request.form.get('event_title')
+    event.event_start = request.form.get('event_start')
+    event.event_end = request.form.get('event_end')
+    event.event_url = request.form.get('event_url')
+    # Daily, Weekly, Monthly, Yearly, Custom
+    event.recurrence_pattern = request.form.get('recurrence_pattern')
+    # Custom pattern input (every _ days, etc.)
+    event.recurrence_interval = request.form.get('recurrence_interval')
+    # Weekly reccurence on a given day
+    event.recurrence_days_of_week = request.form.get('recurrence_days_of_week')
+    # For monthly recurrence on a given day
+    event.recurrence_day_of_month = request.form.get('recurrence_day_of_month')
+    # For monthly recurrence on given week and day
+    event.recurrence_week_and_day = request.form.get('recurrence_week_and_day')
+    # End date for recurring events
+    event.end_date_for_recurrence = request.form.get('end_date_for_recurrence')
+
+    db.session.commit()
+
+    return jsonify({'message':'Event updated successfully'})
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Delete Event <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
