@@ -299,6 +299,18 @@ def edit_event(event_id):
     return jsonify({'message':'Event updated successfully'})
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Delete Event <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+@app.route('/delete_event/<int:event_id>', methods=['POST'])
+def delete_event(event_id):
+
+    event = RefillEvent.query.get(event_id)
+
+    db.session.delete(event)
+    db.session.commit()
+
+    return jsonify({'message':'Event deleted successfully'})
+
+
+
 
 
 # return render_template('cal_event.html', events=events)
