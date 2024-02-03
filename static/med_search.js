@@ -6,8 +6,6 @@ function add_med(btn) {
     const brandName = btn.value;
     const genericName = btn.dataset.genericName;
     const strength = btn.dataset.strength
-    // const dosageForm = btn.dataset.dosageForm;
-    // const unii = btn.dataset.unii;
 
     // Data to send with POST request
     const med_result_data = {
@@ -109,7 +107,7 @@ document.querySelector('#med_search').addEventListener('submit',(evt) =>{
                     });
             })
         } else {
-            results_table.innerHTML = "<tr><td> colspan='6'>No medication matches found!</td></tr>";
+            results_table.innerHTML = "<tr><td>No matches found. Please try again.</td></tr>";
         }
     })
     .catch((error) => {
