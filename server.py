@@ -2,9 +2,9 @@
 from flask import Flask, session, render_template, url_for, request, flash, redirect, jsonify
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from model import connect_to_db, db
-import crud
 from jinja2 import StrictUndefined
+from model import db, connect_to_db, RefillEvent
+import crud
 import os
 
 app = Flask(__name__)
@@ -159,27 +159,33 @@ def delete_prescription():
 
     return jsonify({'Error':'Please login'})
 
-
-
-
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Calendar View <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 # Route to view calendar
 @app.route('/calendar')
 def calendar():
+    """View Calendar"""
 
-    return render_template('calendar.html')
+    # Get user from session
+    user_id = session.get('user_id')
+    if user_id:
+        events = crud.get_events_by_user(user_id)
+        return render_template('calendar.html', events=events)
+    else:
+        flash('Please log in to view the calendar.')
+        return redirect(url_for('login'))
+
+    # events = crud.get_events_by_user(session.get('user_id'))
+    # return redirect(url_for('calendar'))
+    
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Handle events from form <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 # Route to handle calendar events
-@app.route('/cal_event', methods=["POST"])
-def calendar_event():
+@app.route('/calendar/add_event', methods=["POST"])
+def add_event():
     """Process calendar event from user input"""
 
     # Get user from session
-    user_id = session['user_id']
-    # If user, get user details from database
-    if user_id:
-        user = crud.get_user_by_id(user_id)
+    user_id = session.get('user_id')
 
     # Get user event input from the form submission
     event_title = request.form.get('event_title')
@@ -199,44 +205,24 @@ def calendar_event():
     # End date for recurring events
     end_date_for_recurrence = request.form.get('end_date_for_recurrence')
 
+    # Create new event
+    crud.create_event(user_id, event_title, event_start, event_end, event_url, recurrence_pattern, recurrence_interval, recurrence_days_of_week, recurrence_day_of_month, recurrence_week_and_day, end_date_for_recurrence)
 
-# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Create Refill Event Object <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    # Create refill object and add to the database
-    new_event = RefillEvent(
-        user_id=user_id,
-        event_title=event_title,
-        event_start=event_start,
-        event_end=event_end,
-        event_url=event_url,
-        # Daily, Weekly, Monthly, Yearly, Custom
-        recurrence_pattern=recurrence_pattern,
-        # Custom pattern input (every _ days, etc.)
-        recurrence_interval=recurrence_interval,
-        # Weekly reccurence on a given day
-        recurrence_days_of_week=recurrence_days_of_week,
-        # For monthly recurrence on a given day
-        recurrence_day_of_month=recurrence_day_of_month,
-        # For monthly recurrence on given week and day
-        recurrence_week_and_day=recurrence_week_and_day,
-        # End date for recurring events
-        end_date_for_recurrence=end_date_for_recurrence
-    )
-
-    db.session.add(new_event)
     db.session.commit()
 
-    return jsonify({'message': 'Refill added successfully!'})
+    flash('Event added successfully')
+    return redirect(url_for('calendar'))
 
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Get event from database <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-@app.route('/get_events', methods=['GET'])
+@app.route('/calendar/get_events', methods=['GET'])
 def get_events():
 
     # Get user from session
     user_id=session['user_id']
 
     # Get events by user id
-    events = RefillEvent.query.filter_by(user_id=user_id)
+    events = RefillEvent.query.filter_by(user_id=user_id).all()
     
     # Convert events to list of dict for JSON
     event_list = []
@@ -262,10 +248,10 @@ def get_events():
             'end_date_for_recurrence': event.end_date_for_recurrence
         }
         event_list.append(event_data)
-        return jsonify({'events':event_list})
+    return jsonify({'events':event_list})
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Update Event <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-@app.route('/edit_event/<int:event_id>', methods=['POST'])
+@app.route('/calendar/edit_event/<int:event_id>', methods=['POST'])
 def edit_event(event_id):
 
     # Get user from session
@@ -299,7 +285,7 @@ def edit_event(event_id):
     return jsonify({'message':'Event updated successfully'})
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Delete Event <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-@app.route('/delete_event/<int:event_id>', methods=['POST'])
+@app.route('/calendar/delete_event/<int:event_id>', methods=['POST'])
 def delete_event(event_id):
 
     event = RefillEvent.query.get(event_id)
@@ -309,11 +295,6 @@ def delete_event(event_id):
 
     return jsonify({'message':'Event deleted successfully'})
 
-
-
-
-
-# return render_template('cal_event.html', events=events)
 
 if __name__ == "__main__":
     connect_to_db(app)

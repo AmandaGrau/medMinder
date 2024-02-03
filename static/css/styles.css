@@ -23,8 +23,15 @@ tbody tr:nth-child(odd) {
 .dropown:hover .dropdown-options {
     display: block;
 }
+.navbar {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+.navbar-brand, .nav-link {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
 
-
+}
 
 /* Login container box with input boxes and login button */
 /* .wrapper {
