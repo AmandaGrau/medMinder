@@ -16,7 +16,12 @@
       <th>Strength</th>
     </tr>
   </thead>
-  
+</script>
+
+
+
+
+
   <tbody id="prescriptions_table">
     <col width="175">
     <col width="950"
@@ -49,6 +54,36 @@
   </tbody>
 </table>
 <br>
+
+<div class="container">
+  <form action="{{ url_for('add_event') }}" method="POST">
+    <div class="cal-1">
+      <label for="refill_date" class="form-label">Refill Date</label>
+      <input type="date" class="form-control" name="refill_date" id="refill_date" required>
+    </div>
+    <div class="cal-1">
+      <input type="checkbox" id="recurring" name="recurriing" id="yes">
+      <label for="recurring">Recurring Event</label>
+    </div>
+    <div class="cal-1" id="recurrence_options">
+      <label for="recurrence_pattern" class="form-label">Select a scheduele</label>
+      <select class="form-select" name="recurrence_pattern" id="recurrence_pattern">
+        <option value="Daily">Daily</option>
+        <option value="Weekly">Weekly</option>
+        <option value="Monthly">Monthly</option>
+        <option value="Yearly">Yearly</option>
+        <option value="Custom">Custom</option>
+      </select>
+    </div>
+    <div class="cal-1" id="custom_recurrence" style="display: none;">
+      <label for="Custom_pattern" class="form-label">Custom Recurring Event</label>
+      <input type="text" class="form-control" name="custom_pattern" id="custom_pattern" placeholder="Enter custom recurrence">
+    </div>
+    <button type="submit" class="btn btn-outline-dark">Submit</button>
+  </form>
+</div>
+<div id="calendar"></div>
+
 
 <br>
 <br>

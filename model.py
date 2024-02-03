@@ -67,9 +67,9 @@ class RefillEvent(db.Model):
     event_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     prescription_id = db.Column(db.Integer, db.ForeignKey("prescriptions.prescription_id"))
-    event_title = db.Column(db.String(255), nullable=False)
-    event_start = db.Column(db.DateTime, nullable=False)
-    event_end = db.Column(db.DateTime, nullable=False)
+    event_title = db.Column(db.String(255))
+    event_start = db.Column(db.DateTime)
+    event_end = db.Column(db.DateTime)
     event_url = db.Column(db.String(255))
     # Daily, Weekly, Monthly, Yearly, Custom
     recurrence_pattern = db.Column(db.String(20))
