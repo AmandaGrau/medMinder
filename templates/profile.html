@@ -1,14 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}Profile{% endblock %}
 {% block body %}
-
-<a href="/logout">Logout</a>
 <p>Currently logged in: {{ user.email }}</p>
-
 <br>
   <br>
 <h2>Your Presciptions</h2>
-<table>
+<div class="container">
+<table class="table table-bordered">
   <thead>
     <tr>
       <th>Brand Name</th>
@@ -16,85 +14,50 @@
       <th>Strength</th>
     </tr>
   </thead>
-</script>
-
-
-
-
-
   <tbody id="prescriptions_table">
     <col width="175">
     <col width="950"
     <col width="100">
-
     {% for prescription in prescriptions %}
     <tr>
       <td>{{ prescription.brand_name }}</td>
       <td>{{ prescription.generic_name }}</td>
       <td>{{ prescription.strength }}</td>
-          <div class="frequency-number">
-            <td><button value="{{ prescription.prescription_id }}" class="number-dropdown">Select Frequency</button></td>
-              <a href="#">1x</a>
-              <a href="#">2x</a>
-              <a href="#">3x</a>
-            </div>
-          </div>
-          <div class="frequency-taken">
-            <td><button value="{{ prescription.prescription_id }}" class="taken-dropdown">Select Schedule</button></td>
-              <a href="#">day</a>
-              <a href="#">week</a>
-              <a href="#">month</a>
-            </div>
-          </div>
-          <td><button type="button" value="{{ prescription.prescription_id }}" class="edit-btn">Edit</button></td>
-          <td><button type="button" value="{{ prescription.prescription_id }}" class="delete-btn">Delete</button></td>
-          <td><button type="button" value="{{ prescription.prescription_id }}" class="save-btn">Save</button></td>
+   
+      <td><button type="button" value="{{ prescription.prescription_id }}" class="delete-btn">Delete</button></td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
-<br>
-
-<div class="container">
-  <form action="{{ url_for('add_event') }}" method="POST">
-    <div class="cal-1">
-      <label for="refill_date" class="form-label">Refill Date</label>
-      <input type="date" class="form-control" name="refill_date" id="refill_date" required>
-    </div>
-    <div class="cal-1">
-      <input type="checkbox" id="recurring" name="recurriing" id="yes">
-      <label for="recurring">Recurring Event</label>
-    </div>
-    <div class="cal-1" id="recurrence_options">
-      <label for="recurrence_pattern" class="form-label">Select a scheduele</label>
-      <select class="form-select" name="recurrence_pattern" id="recurrence_pattern">
-        <option value="Daily">Daily</option>
-        <option value="Weekly">Weekly</option>
-        <option value="Monthly">Monthly</option>
-        <option value="Yearly">Yearly</option>
-        <option value="Custom">Custom</option>
-      </select>
-    </div>
-    <div class="cal-1" id="custom_recurrence" style="display: none;">
-      <label for="Custom_pattern" class="form-label">Custom Recurring Event</label>
-      <input type="text" class="form-control" name="custom_pattern" id="custom_pattern" placeholder="Enter custom recurrence">
-    </div>
-    <button type="submit" class="btn btn-outline-dark">Submit</button>
-  </form>
 </div>
-<div id="calendar"></div>
-
-
 <br>
 <br>
-    <form id="med_search">
-      <input type="text" id="search_query" name="search_query"
-      placeholder="Enter a medication name">
-      <button type="submit" id="med_search_submit">Search</button>
-    </form>
-<br>
 
+<h2>Calendar Refill Dates </h2>
+<form id="refill-form">
+<div class="input-group mb-3">
+  <span class="input-group-text" id="rx-name">Prescription Name</span>
+  <input type="text" id="prescription-name" class="form-control" aria-label="prescription name">
+</div>
+<div class="input-group mb-3">
+  <span class="input-group-text" id="refill-start">Refill Date</span>
+  <input type="date" id="refill-date-start" class="form-control" aria-label="refill start date">
+</div>
+<div class="input-group mb-3">
+  <span class="input-group-text" id="refill-stop">End Date</span>
+  <input type="date" id="refill-date-end" class="form-control" aria-label="refill end date" aria-describedby="inputGroup-sizing-default">
+</div>
+<button type="submit" id="refill-submit">Submit</button>
+</form>
+<div></div>
+    
+<br>
 <div id="med_search_results"></div>
+<form id="med_search">
+  <input type="text" id="search_query" name="search_query"
+  placeholder="Enter a medication name">
+  <button type="submit" id="med_search_submit">Search</button>
+</form>
 <h2>Search Results</h2>
   <table>
     <thead>
@@ -108,5 +71,22 @@
       </tbody>
   </table>
   <script src="/static/med_search.js"></script>
+<script src="/static/js/events.js"></script>
 {% endblock %}
 
+<!-- <div class="frequency-number">
+            <td><button value="{{ prescription.prescription_id }}" class="number-dropdown">Select Frequency</button></td>
+              <a href="#">1x</a>
+              <a href="#">2x</a>
+              <a href="#">3x</a>
+            </div>
+          </div>
+          <div class="frequency-taken">
+            <td><button value="{{ prescription.prescription_id }}" class="taken-dropdown">Select Schedule</button></td>
+              <a href="#">day</a>
+              <a href="#">week</a>
+              <a href="#">month</a> -->
+            <!-- </div>
+          </div>
+          <td><button type="button" value="{{ prescription.prescription_id }}" class="edit-btn">Edit</button></td> -->
+                    <!-- <td><button type="button" value="{{ prescription.prescription_id }}" class="save-btn">Save</button></td> -->

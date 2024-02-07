@@ -32,7 +32,18 @@ tbody tr:nth-child(odd) {
     padding-bottom: 0.25rem;
 
 }
+/* FullCalendar CSS */
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+  }
 
+#calendar {
+    max-width: 100%;
+    margin: 0 auto;
+  }
 /* Login container box with input boxes and login button */
 /* .wrapper {
     max-width 330px;

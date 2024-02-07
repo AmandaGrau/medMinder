@@ -49,7 +49,6 @@ function add_med(btn) {
     });
 }
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SEARCH A MEDITCATION <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 // Search a Medication
 document.querySelector('#med_search').addEventListener('submit',(evt) =>{
     evt.preventDefault();
@@ -116,7 +115,7 @@ document.querySelector('#med_search').addEventListener('submit',(evt) =>{
     });
 });
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> DELETE A MEDICATION <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 // Delete a prescription
 function deletePrescription(btn) {
 
@@ -157,7 +156,6 @@ document.querySelectorAll('.delete-btn').forEach((deleteBtn) => {
 });
 
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> EDIT A MEDICATION BUTTON <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 // Edit details for a prescription
 function editPrescription(btn) {
 
@@ -175,7 +173,7 @@ function editPrescription(btn) {
     })
         .then((response) => {
             if (response.ok) {
-                // ================================================================================================================================
+// =========================================================
                 const prescriptionRow = btn.closest('tr');
                 prescriptionRow.update();
 
@@ -196,69 +194,3 @@ function editPrescription(btn) {
 document.querySelectorAll('.edit-btn').forEach((editBtn) => {
     editBtn.addEventListener('click',() => editPrescription(editBtn));
 });
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SAVE CHANGES TO PRESCRIPTION <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-// Save prescription updates
-// function savePrescriptionUpdate(btn) {
-
-//     const prescriptionId = btn.value;
-//     const prescriptionRow = btn.closest('tr');
-
-//     fetch('/profile/save_prescription_update', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//             prescriptionId: prescriptionId,
-//         }),
-//     })
-//         .then((response) => {
-//             if (response.ok) {
-                // =============================================================================================================================================
-    //             const prescriptionRow = btn.closest('tr');
-    //             prescriptionRow.update();
-
-    //         } else {
-    //             throw Error('An error occurred in updating your prescription.');
-    //         }
-    //         return response.json();
-    //     })
-    //     .then((results) => {
-    //         console.log(results);
-    //     })
-    //     .catch(error => {
-    //         console.error('Error:', error);
-    //     })
-    // }
-// Save button event listener
-// document.querySelectorAll('.save-btn').forEach((saveBtn) => {
-//     saveBtn.addEventListener('click',() => savePrescriptionUpdate(saveBtn));
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> FREQUENCY DROPDOWNS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-// document.querySelectorAll("#prescriptions_table")
-//     prescriptionRows.forEach(row => {
-//         row.addEventListener("mouseenter", () => {
-//             row.style.backgroundColor = "rgb(236, 235, 235)";
-//         });
-//         row.addEventListener("mouseleave", () => {
-//             row.style.backgroundColor = "";
-//         });
-
-// Frequency Number dropdown event listener
-// const numberDropdowns = document.querySelectorAll(".number-dropdown");
-//     numberDropdowns.forEach(btn => {
-//         btn.addEventListener("click", (event) => {
-//         const prescriptionId = event.target.value;
-//         });
-
-//         const takenDropdowns = document.querySelectorAll(".taken-dropdown");
-//         takenDropdowns.forEach(btn => {
-//             btn.addEventListener("click", (event) => {
-//             const prescriptionId = event.target.value;
-//         });
-//     })
-// })
-//     })
-// })

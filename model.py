@@ -27,7 +27,7 @@ class User(db.Model):
     password = db.Column(db.String(100), nullable=False)
 
     prescriptions = db.relationship("Prescription", back_populates="user")
-    refillevents= db.relationship("RefillEvent", back_populates="user")
+    events= db.relationship("Event", back_populates="user")
 
     def __repr__(self):
         """Show user details."""
@@ -51,48 +51,41 @@ class Prescription(db.Model):
     medication = db.relationship("Medication", back_populates="prescriptions")
 
     # Foreign keys argument and primary join
-    refillevents = db.relationship("RefillEvent", back_populates="prescription")
+    events = db.relationship("Event", back_populates="prescription")
 
     def __repr__(self):
-        """Show prescribed dosge, frequency taken, and refill due date."""
+        """Show brand name, generic name, and prescription strength."""
         return f"<Brand:{self.brand_name} Generic:{self.generic_name} Strength:{self.strength}>"
 
 
 # A calendar for prescription refill dates and reminders
-class RefillEvent(db.Model):
-    """Prescription refill events and reminders"""
+class Event(db.Model):
+    """Refill events and reminders"""
 
-    __tablename__ = "refillevents"
+    __tablename__ = "events"
 
     event_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     prescription_id = db.Column(db.Integer, db.ForeignKey("prescriptions.prescription_id"))
-    event_title = db.Column(db.String(255))
-    event_start = db.Column(db.DateTime)
-    event_end = db.Column(db.DateTime)
-    event_url = db.Column(db.String(255))
-    # Daily, Weekly, Monthly, Yearly, Custom
-    recurrence_pattern = db.Column(db.String(20))
-    # Custom pattern input (every _ days, etc.)
-    recurrence_interval = db.Column(db.Integer)
-    # Weekly reccurence on a given day
-    recurrence_days_of_week = db.Column(db.String(7))
-    # For monthly recurrence on a given day
-    recurrence_day_of_month = db.Column(db.Integer)
-    # For monthly recurrence on given week and day
-    recurrence_week_and_day = db.Column(db.String(20))
-    # End date for recurring events
-    end_date_for_recurrence = db.Column(db.DateTime)
+    title = db.Column(db.String(255))
+    start = db.Column(db.DateTime)
+    end = db.Column(db.DateTime)
 
+    user = db.relationship("User", back_populates="events")
 
-    user = db.relationship("User", back_populates="refillevents")
+    prescription = db.relationship("Prescription", back_populates="events", foreign_keys=[prescription_id], remote_side=[Prescription.prescription_id])
 
-    # Foreign keys argument and primary join
-    prescription = db.relationship("Prescription", back_populates="refillevents", foreign_keys=[prescription_id], remote_side=[Prescription.prescription_id])
+    def serialize(self):
+        return {
+            'title': self.title,
+            'start': self.start.strftime('%Y-%m-%d'),
+            'end': self.end.strftime('%Y-%m-%d'),
+            'allDay': True
+        }
 
     def __repr__(self):
         """Show refill event details"""
-        return f"<Event:{self.event_title}, Start:{self.event_start} End:{self.event_end}>"
+        return f"<Event:{self.title}, Start:{self.start} End:{self.end}>"
 
 
 # Medications queried from Open FDA

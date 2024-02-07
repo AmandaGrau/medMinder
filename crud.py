@@ -1,5 +1,6 @@
 """CRUD Operations"""
-from model import db, User, Prescription, Medication, RefillEvent, connect_to_db
+from model import db, User, Prescription, Medication, Event, connect_to_db
+from datetime import datetime
 
 # Add a new registered user to the database
 def add_new_user(fname, lname, email, password):
@@ -97,83 +98,70 @@ def get_prescription_by_strength(strength):
 
     return Prescription.query.filter_by(strength=strength).first()
 
-# # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> FUNCTIONS TO HANDLE CALENDAR EVENTS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-# Create a new calendar event
-def create_event(user_id, event_title, event_start, event_end, event_url, recurrence_pattern, recurrence_interval, recurrence_days_of_week, recurrence_day_of_month, recurrence_week_and_day, end_date_for_recurrence):
-    """Create and return new calendar event"""
 
-    new_event = RefillEvent(
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> EVENT HANDLING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+# Function to create a new prescription
+def create_event(user_id, title, start, end):
+    """Create and return a new event."""
+
+    event = Event(
         user_id=user_id,
-        event_title=event_title,
-        event_start=event_start,
-        event_end=event_end,
-        event_url=event_url,
-        # Daily, Weekly, Monthly, Yearly, Custom
-        recurrence_pattern=recurrence_pattern,
-        # Custom pattern input (every _ days, etc.)
-        recurrence_interval=recurrence_interval,
-        # Weekly reccurence on a given day
-        recurrence_days_of_week=recurrence_days_of_week,
-        # For monthly recurrence on a given day
-        recurrence_day_of_month=recurrence_day_of_month,
-        # For monthly recurrence on given week and day
-        recurrence_week_and_day=recurrence_week_and_day,
-        # End date for recurring events
-        end_date_for_recurrence=end_date_for_recurrence
-    )
+        title=title,
+        start=start,
+        end=end)
 
-    db.session.add(new_event)
-    db.session.commit()
-
-    return new_event
-
-# Get events by user id
-def get_events_by_user(user_id):
-    """Return all of a user's calendar events"""
-
-    return RefillEvent.query.filter_by(user_id=user_id).all()
-
-# Get event by event id
-def get_event_by_id(event_id):
-    """Return event by id"""
-
-    return RefillEvent.query.get(event_id)
-
-# Update existing event
-def update_event(event_id, event_title, event_start, event_end, event_url, recurrence_pattern, recurrence_interval, recurrence_days_of_week, recurrence_day_of_month, recurrence_week_and_day, end_date_for_recurrence):
-    
-    event = RefillEvent.query.get(event_id)
-    event.event_title=event_title,
-    event.event_start=event_start,
-    event.event_end=event_end,
-    event.event_url=event_url,
-    # Daily, Weekly, Monthly, Yearly, Custom
-    event.recurrence_pattern=recurrence_pattern,
-    # Custom pattern input (every _ days, etc.)
-    event.recurrence_interval=recurrence_interval,
-    # Weekly reccurence on a given day
-    event.recurrence_days_of_week=recurrence_days_of_week,
-    # For monthly recurrence on a given day
-    event.recurrence_day_of_month=recurrence_day_of_month,
-    # For monthly recurrence on given week and day
-    event.recurrence_week_and_day=recurrence_week_and_day,
-    # End date for recurring events
-    event.end_date_for_recurrence=end_date_for_recurrence
-    
+    db.session.add(event)
     db.session.commit()
 
     return event
 
-# Delete a calendar event
-def delete_event(event_id):
-    """Delete calendar event by event id"""
+# Function to delete a prescription
+def delete_event(user_id, title, start, end):
+    """Delete an event."""
 
-    event = RefillEvent.query.get(event_id)
+    event = Event(
+        user_id=user_id,
+        title=title,
+        start=start,
+        end=end)
 
     db.session.delete(event)
     db.session.commit()
 
     return
+
+# Function to get prescription by id
+def get_event_by_id(event_id):
+    """Return event by event id."""
+
+    return Event.query.get(event_id)
+
+# Function to get all prescriptions
+def get_all_events(user_id):
+    """Return all events for user."""
+
+    return Event.query.all(user_id)
+
+# Function to get a prescription by brand name
+def get_event_by_title(title):
+    """Return an event by title."""
+
+    return Event.query.filter_by(title=title).first()
+
+# Function to get a prescription by generic name
+def get_event_by_start(start):
+    """Return an event by start date."""
+
+    return Event.query.filter_by(start=start).first()
+
+
+
+# def get_event_by_prescription(prescription_id):
+#     """Return an event by prescription id."""
+
+#     return Event.query.filter_by(prescription_id=prescription_id).first()
+
+
 
 if __name__ == "__main__":
     from server import app
