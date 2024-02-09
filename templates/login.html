@@ -1,0 +1,21 @@
+
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block body %}
+<div class="login-form">
+  <!-- <img src="2.jpg" class="avatar"> -->
+<h2>Login Form</h2>
+  <form action="/login" method="POST">
+    <input type="text" placeholder="Enter your email" name="" required>
+      <input type="password" name="" placeholder="Enter Your Password">
+      <div class="btn-area">
+        <button type="submit"class="btn2">Login</button>
+      </div>
+      <div class="register-link">
+        <p>Don't have an account?</p>
+        <a href="/register">Register here!</a>
+      </div>
+  </form>
+</div>
+{% endblock body %}

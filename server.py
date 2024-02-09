@@ -11,13 +11,11 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.jinja_env.undefined = StrictUndefined
 
-# >>>>>>>>>>>> CALENDAR VIEW & EVENT HANDLING <<<<<<<<<<<<<<<
 
 @app.route('/calendar')
 def view_calendar():
 
     return render_template('calendar.html')
-
 
 
 @app.route('/add-event', methods=['POST'])
@@ -39,6 +37,7 @@ def add_event():
 
     return jsonify({'message': 'Event added successfully', 'event_id': new_event.event_id})
 
+
 @app.route('/fetch-events')
 def fetch_events():
     user_id = session.get('user_id')
@@ -48,19 +47,21 @@ def fetch_events():
     events = Event.query.filter_by(user_id=user_id).all()
     return jsonify([event.serialize() for event in events])
 
-# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-# Creates route to view homepage
+# Route to view homepage
 @app.route("/")
 def home():
     """View homepage."""
 
-    return render_template("homepage.html")
+    return render_template("home.html")
 
 # Route for user login
 @app.route("/login", methods=["POST", "GET"])
 def login():
     """Process login for user."""
+
+    if request.method == "GET":
+        return render_template('login.html')
 
     if request.method == 'POST':
         email = request.form.get('email')
@@ -71,19 +72,19 @@ def login():
         if user and user.password == password:
         # if user.id and user.password == password:
             session['user_id'] = user.user_id
-            flash(f"Hello, {user.fname}!")
-        return redirect('/profile')
-
+            flash(f"Hello, {user.fname}!", "success")
+            return redirect('/profile')
+        
     # If login fails, display a message asking the user to try logging in again
-    else:
-        flash('The email or password you entered is incorrect. Please try again.')
-    return render_template('homepage.html')
+        else:
+            flash('The email or password you entered is incorrect. Please try again.', "fail")
+    return render_template('login.html')
 
 # Route for user logout
 @app.route('/logout')
 def user_logout():
     session.clear()
-    flash('Logout Complete')
+    flash('Logout Complete', "success")
     return redirect('/')
 
 # Route for user to register for account
@@ -103,7 +104,7 @@ def register_user():
         # If user is registered but not logged in, redirect user to login
         if existing_user:
             # Display a message asking the user to login
-            flash('A user account already exists with this email. Please log into your account.')
+            flash('A user account already exists with this email. Please log into your account.', "fail")
             # Take user to the login form
             return redirect('/login')
 
@@ -113,7 +114,7 @@ def register_user():
         # Save user to session
         session['user_id'] = new_user.user_id
         # Display message confirming successful login
-        flash(f'Welcome, {fname}! Thank you for registering.')
+        flash(f'Welcome, {fname}! Thank you for registering.', "success")
         # If login successful, redirect to profile page
         return redirect ('/profile')
 
@@ -135,7 +136,7 @@ def view_profile():
         user_prescriptions = existing_user.prescriptions
 
     else:
-        flash('Error viewing prescriptions!')
+        flash('Error viewing prescriptions!', "fail")
     return render_template('profile.html', user=existing_user, prescriptions=user_prescriptions)
 
 # Add a prescription
@@ -163,7 +164,7 @@ def add_prescription():
         db.session.commit()
 
         # Return JSON response confirming prescription added
-        return jsonify({'brandName': brand_name, 'message':'New prescription added successfully'})
+        return jsonify({'brandName': brand_name, 'message':'New prescription added successfully', 'prescription_id': prescription.prescription_id})
     # If user not logged in:
     return jsonify({'Error':'Please login'})
 

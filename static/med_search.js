@@ -12,8 +12,6 @@ function add_med(btn) {
         brandName: brandName,
         genericName: genericName,
         strength: strength,
-        // dosageForm: dosageForm,
-        // unii: unii
     };
     // POST request to fetch medication
     fetch('/profile', {
@@ -37,7 +35,7 @@ function add_med(btn) {
         const select_med_row = btn.closest('tr');
 
         // Create new row to add prescription
-        const new_prescription_row = `<tr><td>${brandName}</td><td>${genericName}</td><td>${strength}</td></tr>`;
+        const new_prescription_row = `<tr><td>${brandName}</td><td>${genericName}</td><td>${strength}</td> <td><button type="button" value="${result.prescription_id}" class="delete-btn">Delete</button></td></tr>`;
 
         // Add new prescription row to prescriptions section
         const prescriptions_table = document.querySelector("#prescriptions_table");
@@ -92,9 +90,6 @@ document.querySelector('#med_search').addEventListener('submit',(evt) =>{
                         // If duplicate values exist, filter dups and and remove empty strings
                         return '';
                     }).filter(s => s).join(',');
-
-                    // const dosage_form = product.dosage_form;
-                    // const unii = results.openfda && result.openfda.unii ? result.openfda.unii.join(','): 'N/A';
 
                     const drug_results = `<tr>
                                             <td>${brand_name}</td>
@@ -157,40 +152,40 @@ document.querySelectorAll('.delete-btn').forEach((deleteBtn) => {
 
 
 // Edit details for a prescription
-function editPrescription(btn) {
+// function editPrescription(btn) {
 
-    const prescriptionId = btn.value;
-    const prescriptionRow = btn.closest('tr');
+//     const prescriptionId = btn.value;
+//     const prescriptionRow = btn.closest('tr');
 
-    fetch('/profile/edit_prescription', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            prescriptionId: prescriptionId,
-        }),
-    })
-        .then((response) => {
-            if (response.ok) {
-// =========================================================
-                const prescriptionRow = btn.closest('tr');
-                prescriptionRow.update();
+//     fetch('/profile/edit_prescription', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//             prescriptionId: prescriptionId,
+//         }),
+//     })
+//         .then((response) => {
+//             if (response.ok) {
 
-            } else {
-                throw Error('An error occurred in updating your prescription.');
-            }
-            return response.json();
-        })
-        .then((results) => {
-            console.log(results);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        })
-    }
+//                 const prescriptionRow = btn.closest('tr');
+//                 prescriptionRow.update();
 
-// Edit button event listener
-document.querySelectorAll('.edit-btn').forEach((editBtn) => {
-    editBtn.addEventListener('click',() => editPrescription(editBtn));
-});
+//             } else {
+//                 throw Error('An error occurred in updating your prescription.');
+//             }
+//             return response.json();
+//         })
+//         .then((results) => {
+//             console.log(results);
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//         })
+//     }
+
+// // Edit button event listener
+// document.querySelectorAll('.edit-btn').forEach((editBtn) => {
+//     editBtn.addEventListener('click',() => editPrescription(editBtn));
+// });
