@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}Prescriptions{% endblock %}
-{% block body %}
-<!-- <p>Currently logged in: {{ user.email }}</p> -->
 
+{% block body %}
+<div class="profile-background"></div>
 <div class="container-fluid">
   <div class="row">
     <div class="col-4">
@@ -22,10 +22,10 @@
       <table id="rx-drugs"class="table table-striped table-hover">
         <thead>
           <tr>
-            <th>Brand Name</th>
-            <th>Generic Name</th>
+            <th>Brand</th>
+            <th>Generic</th>
             <th>Strength</th>
-            <th>delete</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody id="prescriptions_table">
@@ -60,7 +60,7 @@
           <span class="input-group-text" id="refill-stop">End Date</span>
           <input type="date" id="refill-date-end" class="form-control" aria-label="refill end date" aria-describedby="inputGroup-sizing-default">
         </div>
-        <button type="submit" id="refill-submit">Submit</button>
+        <button type="submit" class="refill-btn" id="refill-submit">Submit</button>
       </form>
     </div>
 
@@ -68,9 +68,9 @@
       <div id="med_search_results">
       </div>
       <form id="med_search">
-        <input type="text" id="search_query" name="search_query"
+        <input type="text" class="search-input" id="search_query" name="search_query"
         placeholder="Enter a medication name">
-        <button type="submit" id="med_search_submit">Search</button>
+        <button type="submit" class="search-submit-btn" id="med_search_submit">Search</button>
       </form>
     </div>
   </div>
@@ -83,7 +83,7 @@
           <col width="100">
         </tr>
       </thead>
-      <tbody id="results_table">
+      <tbody class="results-content" id="results_table">
       </tbody>
     </table>
   </div>

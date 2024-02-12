@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 def connect_to_db(flask_app, db_uri="postgresql:///prescriptions", echo=True):
-    flask_app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql:///{'prescriptions'}"
+    flask_app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
     flask_app.config["SQLALCHEMY_ECHO"] = True
     flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 

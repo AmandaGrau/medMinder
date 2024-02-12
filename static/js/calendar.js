@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // FullCalendar route view
+    // FullCalendar view
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',

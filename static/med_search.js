@@ -95,7 +95,7 @@ document.querySelector('#med_search').addEventListener('submit',(evt) =>{
                                             <td>${brand_name}</td>
                                             <td>${generic_name}</td>
                                             <td>${strength}</td>
-                                            <td><button onclick="add_med(this)" value="${brand_name}" data-generic-name="${generic_name}" data-strength="${strength}">Add to Prescriptions</button></td>
+                                            <td><button onclick="add_med(this)" value="${brand_name}" data-generic-name="${generic_name}" data-strength="${strength}" class="add-prescription-btn">Add to Prescriptions</button></td>
                                         </tr>`
                     results_table.insertAdjacentHTML("beforeend", drug_results);
                     });
@@ -150,42 +150,3 @@ document.querySelectorAll('.delete-btn').forEach((deleteBtn) => {
     deleteBtn.addEventListener('click',() => deletePrescription(deleteBtn));
 });
 
-
-// Edit details for a prescription
-// function editPrescription(btn) {
-
-//     const prescriptionId = btn.value;
-//     const prescriptionRow = btn.closest('tr');
-
-//     fetch('/profile/edit_prescription', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//             prescriptionId: prescriptionId,
-//         }),
-//     })
-//         .then((response) => {
-//             if (response.ok) {
-
-//                 const prescriptionRow = btn.closest('tr');
-//                 prescriptionRow.update();
-
-//             } else {
-//                 throw Error('An error occurred in updating your prescription.');
-//             }
-//             return response.json();
-//         })
-//         .then((results) => {
-//             console.log(results);
-//         })
-//         .catch(error => {
-//             console.error('Error:', error);
-//         })
-//     }
-
-// // Edit button event listener
-// document.querySelectorAll('.edit-btn').forEach((editBtn) => {
-//     editBtn.addEventListener('click',() => editPrescription(editBtn));
-// });

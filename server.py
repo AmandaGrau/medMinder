@@ -53,7 +53,7 @@ def fetch_events():
 def home():
     """View homepage."""
 
-    return render_template("home.html")
+    return render_template('register.html')
 
 # Route for user login
 @app.route("/login", methods=["POST", "GET"])
@@ -66,9 +66,9 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-
+        print(email)
         user = crud.get_user_by_email(email)
-
+        print(user)
         if user and user.password == password:
         # if user.id and user.password == password:
             session['user_id'] = user.user_id

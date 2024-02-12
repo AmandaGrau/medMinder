@@ -36,7 +36,7 @@ def get_user_by_id(user_id):
 def get_user_by_email(email):
     """Return a user by email."""
 
-    return User.query.filter_by(email=email).first()
+    return User.query.filter(User.email==email).first()
 
 # Function to create a new prescription
 def create_prescription(user_id, brand_name, generic_name, strength):
