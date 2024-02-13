@@ -21,8 +21,9 @@ def view_calendar():
 @app.route('/add-event', methods=['POST'])
 def add_event():
     data = request.get_json()
-    
-    user_id = session.get('user_id')  # Make sure the user is logged in
+
+    # Make sure the user is logged in
+    user_id = session.get('user_id')
     if not user_id:
         return jsonify({'error': 'User not logged in'}), 403
     
@@ -99,7 +100,7 @@ def register_user():
         password = request.form.get('password')
 
         # Check if user is exists
-        existing_user = crud.get_user_by_email('email')
+        existing_user = crud.get_user_by_email(email)
 
         # If user is registered but not logged in, redirect user to login
         if existing_user:

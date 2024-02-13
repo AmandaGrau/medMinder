@@ -98,8 +98,6 @@ def get_prescription_by_strength(strength):
 
     return Prescription.query.filter_by(strength=strength).first()
 
-
-# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> EVENT HANDLING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 # Function to create a new prescription
 def create_event(user_id, title, start, end):
     """Create and return a new event."""
@@ -153,14 +151,6 @@ def get_event_by_start(start):
     """Return an event by start date."""
 
     return Event.query.filter_by(start=start).first()
-
-
-
-# def get_event_by_prescription(prescription_id):
-#     """Return an event by prescription id."""
-
-#     return Event.query.filter_by(prescription_id=prescription_id).first()
-
 
 
 if __name__ == "__main__":
