@@ -321,3 +321,8 @@ body {
     background-color: #fff;
     margin-top: 40px;
 }
+
+.results-content {
+    font-size: 16px;
+    font-weight: bold;
+}
