@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+
+{% block body %}
+  <div class="register-form">
+    <!-- Form for new user to register -->
+    <form action="/register", method="POST">
+      <br>
+      <h1>Register</h1>
+      <div class="input-box">
+        <input type="text" name="fname" placeholder="First Name" required>
+      </div>
+      <div class="input-box">
+        <input type="text" name="lname" placeholder="Last Name" required>
+      </div>
+      <div class="input-box">
+        <input type="text" name="email" placeholder="Email" required>
+      </div>
+      <div class="input-box">
+        <input type="text" name="password" placeholder="Password" required>
+      </div>
+      
+      <div class="btn-reg-area">
+        <button type="submit"class="reg-btn">Submit</button>
+      </div>
+    </form>
+  </div>
+{% endblock body %}
