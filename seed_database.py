@@ -13,6 +13,7 @@ os.system("createdb prescriptions")
 
 # Connect to database through model.py, and call function to create db and tables
 model.connect_to_db(server.app)
+<<<<<<< HEAD
 model.db.create_all()
 
 # generate users and prescriptions to seed database
@@ -22,8 +23,8 @@ for n in range(15):
     email = f"user{n}@test.com"
     password = "test"
 
-    user = crud.add_new_user(fname, lname, email, password)
-    
-    model.db.session.add(user)
+user = crud.add_new_user(fname, lname, email, password)
 
-    model.db.session.commit()
+model.db.session.add(user)
+
+model.db.session.commit()
