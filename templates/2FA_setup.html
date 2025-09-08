@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}2FA Setup{% endblock %}
+
+{% block body %}
+<div class="setup-2FA-background"></div>
+<div class="row justify-content-center">
+	<div class="col-md-6">
+		<h2 class="text-center mb-4">Two-Factor Authentication</h2>
+		<ol>
+		<li>
+			<strong>Install Google Authenticator App</strong>
+		</li>
+		<li>
+			<strong>Open the app</strong> and choose "Add Account" or the "+" button.
+		</li>
+		<li>
+			<strong>Scan this QR code:</strong>
+			<div class="text-center my-3">
+			<img src="data:image/png;base64,{{ qr_b64 }}" alt="Scan this QR code with your Google Authenticator app">
+			</div>
+		</li>
+		<li>
+			If you can't scan the QR code, enter it manually in your app:<br>
+			<code>{{ totp_secret }}</code>
+		</li>
+		<li>
+			<strong>After adding the account,</strong> your app will show a 6-digit code. Enter the code below to finish setup.
+		</li>
+		</ol>
+		<form action="/2FA_setup" method="POST">
+			<input type="hidden" name="email" value="{{ email }}">
+			<input type="text" name="code" placeholder="Enter 6-digit code">
+			<button type="submit">Verify</button>
+		</form>
+	</div>
+</div>
+{% endblock body %}

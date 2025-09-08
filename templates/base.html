@@ -1,44 +1,160 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>medMinder</title>
-    <!-- <link rel="stylesheet" type="text/css" href="styles.css"> -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+    <!-- Page Title -->
+    <title>{% block title %}medMinder - Prescription Management{% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="static/css/styles.css">
+
+    <!-- Favicon -->
+    <link type="image/png" sizes="32x32" rel="icon" href="static/img/icons8-pill-color-32.ico">
+    
+    {% block head %}{% endblock %}
+ 
+</head>
 <body>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">medMinder</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <a class="nav-link active" aria-current="page" href="/login">Login</a>
-          <a class="nav-link" href="/profile">Profile</a>
-          <a class="nav-link" href="/calendar">Calendar</a>
-          <a class="nav-link" href="/logout">Logout</a>
-          <!-- <a class="nav-link disabled" aria-disabled="true">Disabled</a> -->
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <i class="fas fa-pills me-2"></i>
+                medMinder
+            </a>
+
+            <!-- Right side navigation -->
+            <div class="navbar-nav ms-auto">
+                {% set current_page = request.endpoint %}
+
+                {% if session.get('user_id') %}
+                    <!-- Hamburger menu for logged in user -->
+                    <div class="nav-item dropdown hamburger-menu">
+                        <a class="nav-link hamburger-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="hamburger-icon">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end hamburger-dropdown">
+                            {% if current_page != 'view_profile' %}
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('view_profile') }}">
+                                        <i class="fas fa-pills me-2"></i>My Prescriptions
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% if current_page != 'view_calendar' %}
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('view_calendar') }}">
+                                        <i class="fas fa-calendar-alt me-2"></i>Calendar
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% if current_page != 'home' %}
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('home') }}">
+                                        <i class="fas fa-home me-2"></i>Home
+                                    </a>
+                                </li>
+                            {% endif %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item logout-item" href="{{ url_for('user_logout') }}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <!-- User not logged in - show Login link -->
+                    <div class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
         </div>
-      </div>
-    </div>
-  </nav>
-    <!-- Show flashed messages -->
+    </nav>
+                
+    <!-- Show flash Messages --> 
     {% with messages = get_flashed_messages(with_categories=true) %}
-      {% for category, message in messages %}
-        <div class="{{category}}">{{ message }}</div>
-      {% endfor %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissable fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close"
+                        data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     {% endwith %}
 
-{% block body %}
-{% endblock body %}
+    <main class="main-content">
+        {% block body %}
+        <!-- Content from other templates -->
+        {% endblock %}
+    </main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="footer-text mb-1">
+                        <small>&copy; 2025 medMinder. All rights reserved.</small>
+                    </p>
+                    <p class="footer-subtext mb-0">
+                        <small>Keeping your health on track, one prescription at a time.</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JavaScript Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+   <!-- Custom Javascript for hamburger menu -->
+   <script>
+        // Dropdown behavior for hamburger menu
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerMenu = document.querySelector('.hamburger-menu');
+            const hamburgerToggle = document.querySelector('.hamburer-toggle');
+            const hamburgerIcon = document.querySelector('.hamburger-icon');
+
+            if (hamburgerMenu && hamburgerToggle) {
+                // Add hover effect
+                hamburgerMenu.addEventListener('mouseneter', function() {
+                    hamburgerIcon.classList.add('active');
+                });
+
+                hamburgerMenu.addEventListener('mouseleave', function() {
+                    hamburgerIcon.classList.remove('active');
+                });
+
+                hamburgerMenu.addEventListener('click', function() {
+                    hamburgerIcon.classList.toggle('clicked');
+                });
+            }
+        });
+   </script>
 </body>
 </html>

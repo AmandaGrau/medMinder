@@ -1,13 +1,21 @@
 {% extends 'base.html' %}
 
-{% block body %}
-<!-- FullCalendar -->
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+{% block head %}
+<!-- Core FullCalendar library -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.js"></script>
+{% endblock head %}
 
-<div class="calendar-background"></div>
-<div class="container">
-  <div id="calendar">
-  </div>
+{% block body %}
+<div class="container-fluid">
+    <div class="calendar-background"></div>
+        <div class="page-header">
+            <h1 class="page-title">Medication Calendar</h1>
+            <p class="page-subtitle">Click on events to edit or delete • Drag events to change dates</p>
+            <a href="/profile" class="btn-secondary" style="margin-bottom: 20px;">
+                ← Back to Dashboard
+            </a>
+        </div>
+    <div class="container "id="calendar"></div>
 </div>
 <script src="/static/js/calendar.js"></script>
 {% endblock body %}

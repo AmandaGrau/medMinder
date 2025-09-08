@@ -2,93 +2,157 @@
 {% block title %}Prescriptions{% endblock %}
 
 {% block body %}
-<div class="profile-background"></div>
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-4">
-      <h2>Your Presciptions</h2>
-    </div>
-    <div class="col-4">
-      <h2>Calendar Refill Dates </h2>
-    </div>
-    <div class="col-4">
-      <h2>Search Results</h2>
-    </div>
-  </div>
+	<div class="page-header">
+		<h1 class="page-title">Presciption Dashboard</h1>
+		<p class="page-subtitle">Manage your prescriptions and refills</p>
+	</div>
 
-  <div class="row">
+	<div class="profile-grid">
+		<!-- Prescription Card - full width -->
+		<div class="card prescriptions-card">
+			<div class="card-header">
+				<h2 class="card-title">
+					<span class="card-icon">💊</span>
+					Your Prescriptions
+				</h2>
+				<span class="badge">{{ prescriptions | length }} active</span>
+			</div>
+	
+			{% if prescriptions %}
+			<div class="table-responsive">
+				<table class="prescriptions-table">
+					<thead>
+						<tr>
+							<th>Brand Name</th>
+							<th>Generic Name</th>
+							<th>Strength</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for prescription in prescriptions %}
+						<tr>
+							<td>{{ prescription.brand_name }}</td>
+							<td>{{ prescription.generic_name }}</td>
+							<td>{{ prescription.strength }}</td>
+							<td>
+								<button type="button"
+										value="{{ prescription.prescription_id }}" class="delete-btn"
+										onclick="deletePrescription(prescription.prescription_id)">
+									Delete
+								</button>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		{% else %}
+			<div class="empty-state">
+				<div class="empty-icon"></div>
+				<h3 class="empty-title">No saved prescriptions</h3>
+				<p class="empty-description">Search for medications below to save your first prescription.</p>
+			</div>
+		{% endif %}
+	</div>
 
-    <div class="col">
-      <table id="rx-drugs"class="table table-striped table-hover">
-        <thead>
-          <tr>
-            <th>Brand</th>
-            <th>Generic</th>
-            <th>Strength</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody id="prescriptions_table">
-          <col width="175">
-          <col width="950">
-          <col width="100">
-          <col width="50">
-          {% for prescription in prescriptions %}
-          <tr>
-            <td>{{ prescription.brand_name }}</td>
-            <td>{{ prescription.generic_name }}</td>
-            <td>{{ prescription.strength }}</td>
-         
-            <td><button type="button" value="{{ prescription.prescription_id }}" class="delete-btn">Delete</button></td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+		<!-- Refill Card -->
+		<div class="card refill-card"> 
+			<div class="card-header">
+				<h2 class="card-title">
+					<span class="card-icon">📅</span>
+					Schedule Refill
+				</h2>
+			</div>
+		
+			<form id="refill-form">
+				<div class="form-group">
+					<label class="form-label"
+					for="prescription-name">Prescription Name</label>
+					<input type="text"
+							id="prescription-name" 
+							class="form-input" 
+							placeholder="Enter prescription name"
+							required>
+				</div>
+						
+				<div class="form-group">
+					<label class="form-label"
+					for="refill-date-start">Refill Start Date</label>
+					<input type="date"
+							id="refill-date-start" 
+							class="form-input">
+				</div>
+					
+				<div class="form-group">
+					<label class="form-label"
+					for="refill-date-end">Refill End Date</label>
+					<input type="date"
+							id="refill-date-end" 
+							class="form-input">
+				</div>
 
-    <div class="col"> 
-      <form id="refill-form">
-        <div class="input-group mb-3">
-          <span class="input-group-text" id="rx-name">Prescription Name</span>
-          <input type="text" id="prescription-name" class="form-control" aria-label="prescription name">
-        </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text" id="refill-start">Refill Date</span>
-          <input type="date" id="refill-date-start" class="form-control" aria-label="refill start date">
-        </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text" id="refill-stop">End Date</span>
-          <input type="date" id="refill-date-end" class="form-control" aria-label="refill end date" aria-describedby="inputGroup-sizing-default">
-        </div>
-        <button type="submit" class="refill-btn" id="refill-submit">Submit</button>
-      </form>
-    </div>
+				<button type="submit" class="btn-primary w-100" style="margin-bottom: 10px;">
+					Schedule Refill
+				</button>
 
-    <div class="col">
-      <div id="med_search_results">
-      </div>
-      <form id="med_search">
-        <input type="text" class="search-input" id="search_query" name="search_query"
-        placeholder="Enter a medication name">
-        <button type="submit" class="search-submit-btn" id="med_search_submit">Search</button>
-      </form>
-    </div>
-  </div>
-  <div class="row results-table-spacing">
-    <table>
-      <thead>
-        <tr>
-          <col width="175">
-          <col width="950">
-          <col width="100">
-        </tr>
-      </thead>
-      <tbody class="results-content" id="results_table">
-      </tbody>
-    </table>
-  </div>
+				<!-- Open calendar in new window -->
+				<button type="button" id="view-calendar-btn" class="btn-secondary w-100">
+					Open Calendar
+				</button>
+			</form>
+		</div>
+
+		<!-- Medication Search Card -->
+		<div class="card search-card"> 
+			<div class="card-header">
+				<h2 class="card-title">
+					<span class="card-icon">🔍</span>
+					Add Medication
+				</h2>
+			</div>
+
+			<form id="med_search">
+				<div class="search-container">
+					<input type="text"
+							class="form-input search-input"
+							id="search_query"
+							name="search_query"
+							placeholder="Search for a medication (e.g., Tylenol, Advil)..."
+							minlength="2"
+							required>
+					<button type="submit" class="btn-secondary">
+						Search
+					</button>
+				</div>
+			</form>
+
+			<!-- Search Results -->
+			<div id="med_search_results"></div>
+				
+				<div class="table-responsive" style="margin-top: 20px;">	
+					<table class="results-table"
+							id="results_table_container"
+							style="display: none;">
+						<thead>
+							<tr>
+								<th>Brand Name</th>
+								<th>Generic Name</th>
+								<th>Strength</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody id="results_table">
+							<!-- Search results display here dynamically  -->
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
-<script src="/static/med_search.js"></script>
-<script src="/static/js/events.js"></script>
+<script src="/static/js/profile.js"></script>
+<script src="/static/js/med_search.js"></script>
 {% endblock body %}

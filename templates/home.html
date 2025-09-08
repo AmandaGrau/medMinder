@@ -1,6 +1,35 @@
 {% extends 'base.html' %}
-{% block title %}Home{% endblock %}
-
+{% block title %}medMinder - Prescription Management{% endblock %}
 
 {% block body %}
+<div class="hero-section">
+<div class="hero-content">
+    <h1 class="app-title">medMinder</h1>
+    <p class="tagline">Prescription Management At Your Fingertips</p>
+
+    <div class="cta-section">
+        <p class="account-prompt">Don't have an account?</p>
+        <a href="/register" class="create-account-btn">Register Today!</a>
+    </div>
+
+    <!-- Features -->
+    <div class="features">
+        <div class="feature-card">
+            <div class="feature-icon">💊</div>
+            <h3 class="feature-title">Track Medcations</h3>
+            <p class="feature-description">Easily manage your prescriptions in one secure location</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📅</div>
+            <h3 class="feature-title">Refill Reminder</h3>
+            <p class="feature-description">Never miss a refill with calendar notifications</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3 class="feature-title">Secure & Private</h3>
+            <p class="feature-description">Your prescription data is protected and secure</p>
+        </div>
+    </div> 
+</div>
+</div>
 {% endblock body %}

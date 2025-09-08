@@ -1,23 +1,24 @@
 """CRUD Operations"""
-from model import db, User, Prescription, Medication, Event, connect_to_db
+from model import db, User, Prescription, Event, connect_to_db
 from datetime import datetime
 
-# Add a new registered user to the database
-def add_new_user(fname, lname, email, password):
-    """Add new user to database."""
+# Add new user to the database
+def add_new_user(fname, lname, email, password, totp_secret=None):
+    """Add new user to the database with hashed password."""
 
-    user = User(fname=fname, lname=lname, email=email, password=password)
+    user = User(fname=fname, lname=lname, email=email, totp_secret=totp_secret)
+    # Hash the password
+    user.set_password(password)
     db.session.add(user)
-    db.session.commit()
-
     return user
 
 # Register a new user with email and password
 def register_user(fname, lname, email, password):
-    """Create and return a new user."""
+    """Create and return a new user with hashed password."""
 
-    user = User(fname=fname, lname=lname, email=email, password=password)
-
+    user = User(fname=fname, lname=lname, email=email)
+    # Hash the password
+    user.set_password(password)
     return user
 
 # Function to get all users

@@ -2,27 +2,31 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-  <div class="register-form">
-    <!-- Form for new user to register -->
-    <form action="/register", method="POST">
-      <br>
-      <h1>Register</h1>
-      <div class="input-box">
-        <input type="text" name="fname" placeholder="First Name" required>
-      </div>
-      <div class="input-box">
-        <input type="text" name="lname" placeholder="Last Name" required>
-      </div>
-      <div class="input-box">
-        <input type="text" name="email" placeholder="Email" required>
-      </div>
-      <div class="input-box">
-        <input type="text" name="password" placeholder="Password" required>
-      </div>
-      
-      <div class="btn-reg-area">
-        <button type="submit"class="reg-btn">Submit</button>
-      </div>
-    </form>
-  </div>
+
+<div class="register-container">
+    <div class="register-form">
+		<h1 class="form-title">Register</h1>
+
+		<form action="/register" method="POST">
+			<div class="form-group">
+				<input type="name" name="fname" class="register-form-input" placeholder="First Name" required>
+			</div>
+		
+			<div class="form-group">
+				<input type="name" name="lname" class="register-form-input" placeholder="Last Name" required>
+			</div>
+		
+			<div class="form-group">
+				<input type="email" name="email" class="register-form-input" placeholder="Enter your email" required>
+			</div>
+
+			<div class="form-group">
+				<input type="password" name="password" class="register-form-input" placeholder="Enter a password" required>
+			</div>
+	
+			<button type="submit" class="reg-btn">Submit</button>
+		</form>
+    </div>
+</div>
+<script src="/static/js/med_search.js"></script>
 {% endblock body %}

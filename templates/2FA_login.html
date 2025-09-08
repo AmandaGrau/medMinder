@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}2FA Login{% endblock %}
+
+{% block body %}
+<div class="login-2FA-background"></div>
+<div class="row justify-content-center">
+	<div class="col-md-6">
+		<h2 class="text-center mb-4">Two-Factor Authentication</h2>
+		<p class="text-center">Open your authenticator app and enter the 6-digit code for your MedMinder account.</p>
+		<form method="POST" action="/2FA_login">
+		<div class="mb-3">
+			<label for="code" class="form-label">6-digit code</label>
+			<input type="text" class="form-control" id="code" name="code" required>
+			<input type="hidden" name="email" value="{{ email }}">
+		</div>
+		<button type="submit" class="btn btn-primary w-100">Verify & Log In</button>
+		</form>
+	</div>
+</div>
+{% endblock body %}

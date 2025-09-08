@@ -1,7 +1,9 @@
 """Models for prescription tracking app."""
+
 from datetime import datetime
 from flask import Flask, session, render_template, url_for, request, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
@@ -24,17 +26,26 @@ class User(db.Model):
     fname = db.Column(db.String(20), nullable=False)
     lname = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
-    password = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    totp_secret = db.Column(db.String(32), nullable=True)
 
     prescriptions = db.relationship("Prescription", back_populates="user")
-    events= db.relationship("Event", back_populates="user")
-
+    events = db.relationship("Event", back_populates="user")
+    
+    def set_password(self, password):
+        """Hash and set the Users' password."""
+        
+        self.password = generate_password_hash(password)
+        
+    def check_password(self, password):
+        """Check if provided password matches the hashed password."""
+    
+        return check_password_hash(self.password, password)
+    
     def __repr__(self):
-        """Show user details."""
-        return f"<First:{self.fname} Last:{self.lname} Email:{self.email} Password:{self.password}>"
+        return f"<First:{self.fname} Last:{self.lname} Email:{self.email}>"
 
 
-# User's prescribed medications
 class Prescription(db.Model):
     """The user's prescribed medication."""
 
@@ -50,42 +61,27 @@ class Prescription(db.Model):
     user = db.relationship("User", back_populates="prescriptions")
     medication = db.relationship("Medication", back_populates="prescriptions")
 
-    # Foreign keys argument and primary join
-    events = db.relationship("Event", back_populates="prescription")
-
     def __repr__(self):
-        """Show brand name, generic name, and prescription strength."""
         return f"<Brand:{self.brand_name} Generic:{self.generic_name} Strength:{self.strength}>"
 
 
-# A calendar for prescription refill dates and reminders
 class Event(db.Model):
     """Refill events and reminders"""
 
     __tablename__ = "events"
 
     event_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    prescription_id = db.Column(db.Integer, db.ForeignKey("prescriptions.prescription_id"))
-    title = db.Column(db.String(255))
-    start = db.Column(db.DateTime)
-    end = db.Column(db.DateTime)
+    title = db.Column(db.String(200), nullable=False)
+    start = db.Column(db.String(20), nullable=False)
+    end = db.Column(db.String(20), nullable=True)
+    all_day = db.Column(db.Boolean, default=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+    created = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = db.relationship("User", back_populates="events")
 
-    prescription = db.relationship("Prescription", back_populates="events", foreign_keys=[prescription_id], remote_side=[Prescription.prescription_id])
-
-    def serialize(self):
-        return {
-            'title': self.title,
-            'start': self.start.strftime('%Y-%m-%d'),
-            'end': self.end.strftime('%Y-%m-%d'),
-            'allDay': True
-        }
-
     def __repr__(self):
-        """Show refill event details"""
-        return f"<Event:{self.title}, Start:{self.start} End:{self.end}>"
+        return f"<Event:{self.id}; {self.title}>"
 
 
 # Medications queried from Open FDA
@@ -102,10 +98,9 @@ class Medication(db.Model):
     prescriptions = db.relationship("Prescription", back_populates="medication")
 
     def __repr__(self):
-        """Medication names and strengths."""
         return f"<Brand:{self.brand_name}, Generic:{self.generic_name} Strength:{self.strength}>"
+
 
 if __name__ == "__main__":
     from server import app
-    # Function call connecting the app to database
     connect_to_db(app)
